@@ -794,6 +794,14 @@ T.abdmach={grp:"glutes",mv:"Відведення стегна сидячи",name
   handle:"hdl"};
 EXL.push({i:EXL.length,g:"glutes",n:"Розведення ніг у тренажері сидячи",k:"abdmach",t:.15},{i:EXL.length+1,g:"glutes",n:"Розведення ніг у тренажері з нахилом уперед",k:"abdmach",t:.9});
 EXL.forEach(e=>{ if(e.n==="Відведення ніг у тренажері"){ e.k="abdmach"; e.t=.4; } });
+/* one entry per movement: exercises that look the same in the simulator are merged, their other names stay searchable */
+{ const MERGE=[["Відведення ноги назад у кросовері","Махи ногою назад, стоячи рачки","Донкі-кік у тренажері"],["Розведення ніг у тренажері сидячи","Відведення ніг у тренажері"]];
+  const byName=new Map(EXL.map(e=>[e.n,e])), drop=new Set(), out=[];
+  for(const [main,...rest] of MERGE){ const m=byName.get(main); if(!m) continue; m.a=(m.a||[]).concat(rest.filter(n=>byName.has(n))); rest.forEach(n=>drop.add(n)); }
+  for(const e of EXL){ if(drop.has(e.n)) continue; const tw=out.find(o=>o.k===e.k&&o.g===e.g&&Math.abs(o.t-e.t)<.06);
+    if(tw){ tw.a=(tw.a||[]).concat(e.n,...(e.a||[])); continue; } out.push(e); }
+  EXL.length=0; out.forEach((e,i)=>{ e.i=i; EXL.push(e); }); }
+const exNameOk=(e,n)=>{ n=String(n||"").toLowerCase(); return e.n.toLowerCase()===n||(e.a||[]).some(x=>x.toLowerCase()===n); };
 
 const st={k:"thrust",t:0.45,p:1,play:false,vec:true,e:0};
 function render(){ const tp=T[st.k], g=tp.geo(st.t,st.p), gw=tp.geo(st.t,1), L=tp.load(gw), keys=Object.keys(L), sum=keys.reduce((a,k)=>a+L[k],0), mx=Math.max(...keys.map(k=>L[k]));
@@ -846,8 +854,8 @@ function pickEx(i){ const e=EXL[i]; if(!e) return; st.e=i; st.k=e.k; st.t=e.t; s
 function inGrp(d){ const g=EXL[st.e].g, list=EXL.filter(e=>e.g===g), ix=list.findIndex(e=>e.i===st.e); pickEx(list[(ix+d+list.length)%list.length].i); }
 let pg=null; function pickList(){ const q=(document.getElementById("pq").value||"").trim().toLowerCase(), groups=MG7.filter(m=>!pg||m[0]===pg);
   document.getElementById("pgrp").innerHTML=\`<button data-g="" aria-pressed="\${!pg}">Усі · \${EXL.length}</button>\`+MG7.map(([k,ic,n])=>\`<button data-g="\${k}" aria-pressed="\${k===pg}">\${ic} \${n}</button>\`).join("");
-  let h=""; for(const [k,ic,n] of groups){ const items=EXL.filter(e=>e.g===k&&(!q||e.n.toLowerCase().includes(q)||T[e.k].name.toLowerCase().includes(q))); if(!items.length) continue;
-    h+=\`<h4>\${ic} \${n} · \${items.length}</h4>\`+items.map(e=>\`<button data-i="\${e.i}" aria-current="\${e.i===st.e}"><span>\${e.n}</span><small>\${T[e.k].mv}</small></button>\`).join(""); }
+  let h=""; for(const [k,ic,n] of groups){ const items=EXL.filter(e=>e.g===k&&(!q||e.n.toLowerCase().includes(q)||(e.a||[]).some(x=>x.toLowerCase().includes(q))||T[e.k].name.toLowerCase().includes(q))); if(!items.length) continue;
+    h+=\`<h4>\${ic} \${n} · \${items.length}</h4>\`+items.map(e=>\`<button data-i="\${e.i}" aria-current="\${e.i===st.e}"><span>\${e.n}</span><small>\${e.a&&e.a.length?"також: "+e.a.join(", "):T[e.k].mv}</small></button>\`).join(""); }
   document.getElementById("plist").innerHTML=h||\`<p class="note" style="text-align:center;margin-top:30px">Нічого не знайдено</p>\`; }
 function openPick(){ pg=null; document.getElementById("pq").value=""; pickList(); document.getElementById("pick").hidden=false; const cur=document.querySelector('#plist [aria-current=true]'); if(cur) cur.scrollIntoView({block:"center"}); }
 document.getElementById("expick").onclick=openPick; document.getElementById("exprev").onclick=()=>inGrp(-1); document.getElementById("exnext").onclick=()=>inGrp(1);
@@ -1011,7 +1019,7 @@ document.getElementById("anfind0").onclick=()=>parent.postMessage({type:"bio-coa
 window.addEventListener("message",e=>{ const d=e.data||{}; if(d.type!=="bio-init") return;
   if(d.who) an.who=d.who; an.lock=!!d.lock; document.getElementById("anwho").style.display=an.lock?"none":""; document.getElementById("anfind0").style.display=an.lock?"":"none";
   if(d.view&&AN[d.view.k]){ const v=d.view, a=v.a||0.75; an.view=v; an.k=v.k; an.h=v.h||170; an.pts={}; for(const n in v.p) an.pts[n]={x:v.p[n][0]*1000,y:v.p[n][1]*1000/a}; an.cur=99; an.url=null; }
-  if(d.ex&&T[d.ex]){ const e=(d.exn&&EXL.find(x=>x.k===d.ex&&x.n.toLowerCase()===String(d.exn).toLowerCase()))||exOf(d.ex); pickEx(e.i); }
+  if(d.ex&&T[d.ex]){ const e=(d.exn&&(EXL.find(x=>x.k===d.ex&&exNameOk(x,d.exn))||EXL.find(x=>exNameOk(x,d.exn))))||exOf(d.ex); pickEx(e.i); }
   setMode(d.mode||"sim"); window.scrollTo(0,0); });
 async function anImage(){ const m=document.getElementById("anmedia"), svg=document.getElementById("anov"); const vb=svg.viewBox.baseVal, w=vb.width, h=vb.height;
   const sc=Math.min(1,900/Math.max(w,h)), cv=document.createElement("canvas"); cv.width=Math.round(w*sc); cv.height=Math.round(h*sc); const x=cv.getContext("2d");
