@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Біомеханіка вправи</title>
+<style>
+:root{--bg:#0F1115;--card:#1A1D24;--fg:#F2F4F8;--muted:#8A93A6;--accent:#3E88F7;--line:#2A2F3A}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.4 -apple-system,"SF Pro Text",Inter,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:560px;margin:0 auto;padding:14px 16px 28px}
+.eyebrow{font:700 12px/1 inherit;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h2{margin:6px 0 4px;font-size:22px}
+.sub{color:var(--muted);font-size:13.5px;margin:0 0 12px}
+.pills{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px;scrollbar-width:none}
+.pill{flex:none;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:999px;padding:8px 12px;font:600 13.5px inherit}
+.grp{display:flex;gap:6px;overflow-x:auto;margin-bottom:8px;scrollbar-width:none}.grp button{flex:none;border:0;background:none;color:var(--muted);font:700 13px inherit;padding:6px 8px;border-bottom:2px solid transparent}.grp button[aria-pressed=true]{color:var(--fg);border-color:var(--accent)}
+.mv{display:inline-block;margin:0 0 8px;padding:3px 9px;border-radius:999px;background:#ffffff10;color:var(--muted);font:600 12px inherit}
+.planes{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:2px 0 8px}
+.pl{display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:14px;padding:6px 4px 7px;font:700 12px inherit}
+.pl svg{width:44px;height:40px}.pl[aria-pressed=true]{color:#fff;border-color:var(--pc);background:color-mix(in srgb,var(--pc) 18%,var(--card));box-shadow:0 0 12px color-mix(in srgb,var(--pc) 35%,transparent)}
+.pldesc{font-size:13px;color:var(--muted);margin:0 0 10px;padding:8px 10px;border-radius:12px;background:#ffffff08;border-left:3px solid var(--pc)}.pldesc b{color:var(--fg)}
+.pill[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.stage{position:relative;border-radius:20px;background:radial-gradient(120% 90% at 50% 20%,#1E2430 0%,#12151B 70%);border:1px solid var(--line);overflow:hidden;touch-action:none}
+svg{display:block;width:100%;height:auto}
+.badge{position:absolute;left:12px;top:12px;background:#0009;border:1px solid #ffffff22;border-radius:12px;padding:6px 10px;font:600 13px inherit}
+.badge b{color:#fff}
+.tip{margin:10px 0 0;padding:10px 12px;border-radius:14px;font-size:14px;border:1px solid}
+.tip.good{background:#3DBE7A1a;border-color:#3DBE7A55}
+.tip.warn{background:#F2B2331a;border-color:#F2B23355}
+.sl{margin-top:14px}
+.slh{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.slh b{color:var(--fg);font-size:13.5px}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:34px;background:transparent}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:8px;background:linear-gradient(90deg,#3E88F7,#E0457B,#9B6BFF)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-11px;border-radius:50%;background:#fff;border:6px solid #FF6A2B;box-shadow:0 0 0 6px #FF6A2B33,0 4px 12px #0008}
+.vtog{position:absolute;right:10px;top:10px;border:1px solid #4EA1FF88;background:#0B0D11cc;color:#9CC8FF;border-radius:999px;padding:6px 10px;font:700 12.5px inherit}.vtog[aria-pressed=false]{color:var(--muted);border-color:var(--line)}
+.vecp{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}.vh{font-size:13px;color:var(--muted);line-height:1.45}.vh b{color:#9CC8FF}
+.bars{margin-top:14px;display:grid;gap:9px}
+.bar{display:grid;grid-template-columns:minmax(0,1.25fr) 1fr 44px;gap:10px;align-items:center;font-size:14px}
+.bar i{display:block;height:10px;border-radius:6px;background:#ffffff12;overflow:hidden}
+.bar i u{display:block;height:100%;border-radius:6px;transition:width .12s}
+.bar span{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.row{display:flex;gap:8px;margin-top:14px}
+.btn{flex:1;border:0;border-radius:14px;padding:13px;font:700 15px inherit;background:var(--card);color:var(--fg)}
+.btn.p{background:var(--accent);color:#fff}
+.note{color:var(--muted);font-size:12px;margin-top:12px}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--card);border-radius:14px;padding:4px;margin-bottom:12px}
+.modes button{border:0;border-radius:10px;padding:10px;font:700 14px inherit;background:none;color:var(--muted)}.modes button[aria-pressed=true]{background:var(--accent);color:#fff}
+.vbox{position:relative;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--line);touch-action:none}
+.vbox video{display:block;width:100%;height:auto}.vbox svg{position:absolute;inset:0;width:100%;height:100%}
+.drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:220px;border:2px dashed var(--line);border-radius:16px;color:var(--muted);text-align:center;padding:20px}
+.drop b{color:var(--fg);font-size:16px}
+.scrub{display:flex;gap:8px;align-items:center;margin:10px 0}.scrub button{flex:none;width:44px;height:40px;border-radius:12px;border:0;background:var(--card);color:var(--fg);font:700 16px inherit}
+.scrub input{flex:1}.tcode{font:600 12px ui-monospace,monospace;color:var(--muted);min-width:44px;text-align:right}
+.ptchips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.ptc{border:1px solid var(--line);border-radius:999px;padding:6px 10px;font:600 13px inherit;background:var(--card);color:var(--muted)}
+.ptc.done{color:#3DDC84;border-color:#3DDC8466}.ptc.cur{color:#fff;border-color:#FF6A2B;background:#FF6A2B33}
+.prompt{padding:10px 12px;border-radius:12px;background:#FF6A2B1f;border:1px solid #FF6A2B66;font-size:14px;margin:8px 0}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.metric{background:var(--card);border-radius:12px;padding:10px}.metric small{display:block;color:var(--muted);font-size:12px}.metric b{font-size:17px}
+.field{width:100%;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:12px;padding:11px 12px;font:15px inherit}
+.flabel{font-size:12.5px;color:var(--muted);margin:12px 0 6px;display:block}
+.hrow{display:flex;gap:8px;align-items:center}.hrow .field{width:100px}
+.who{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0}.who button{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:12px;padding:9px;font:700 13px inherit}.who button[aria-pressed=true]{color:#fff;border-color:var(--accent);background:#3E88F733}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#1F2430;border:1px solid var(--line);color:#fff;padding:10px 14px;border-radius:12px;font-size:14px;z-index:20;box-shadow:0 6px 20px #0008}
+#finger{position:fixed;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:#ffffff38;border:2px solid #ffffffaa;pointer-events:none;z-index:9;display:none;box-shadow:0 0 18px #fff6}
+</style></head><body>
+<div id="finger"></div>
+<div class="wrap">
+  <div class="modes" id="modes"><button data-m="sim" aria-pressed="true">🧬 Симулятор</button><button data-m="an" aria-pressed="false">📹 Розбір техніки</button></div>
+  <div id="simv">
+  <div class="eyebrow">🧬 Біомеханіка вправи</div>
+  <h2 id="title">Ягодичний міст</h2>
+  <p class="sub" id="sub">Тягніть оранжеву ручку ↔ або повзунок — видно, які м’язи працюють більше.</p>
+  <div class="planes" id="planes"></div><p class="pldesc" id="pldesc"></p><div class="grp" id="grp"></div><div class="pills" id="pills"></div><div class="mv" id="mv"></div>
+  <div class="stage" id="stage"><svg id="svg" viewBox="0 0 400 290"></svg><div class="badge" id="badge"></div><button class="vtog" id="vtog" aria-pressed="true">↘ Вектори</button></div>
+  <div class="sl"><div class="slh"><span id="l0"></span><b id="lv"></b><span id="l1"></span></div>
+    <input type="range" id="rng" min="0" max="1000" value="500" aria-label="Параметр техніки"></div>
+  <div class="tip good" id="tip"></div>
+  <div class="bars" id="bars"></div><div class="bars vecp" id="vecp"></div>
+  <div class="row"><button class="btn p" id="play">▶ Показати рух</button></div>
+  <p class="note">Спрощена модель: плечі сил відносно суглобів і кути. Показує тенденцію, а не точні відсотки.</p>
+  </div>
+  <div id="anv" hidden>
+    <div class="eyebrow">📹 Розбір техніки за відео</div>
+    <h2>Аналіз техніки</h2>
+    <p class="sub">Завантажте відео вправи збоку (або спереду), зупиніть на найважчій точці руху й поставте точки на суглоби. Застосунок порахує кути, вектори навантаження й підкаже, що виправити.</p>
+    <div class="who" id="anwho"><button data-w="self" aria-pressed="true">🙋 Перевіряю себе</button><button data-w="coach" aria-pressed="false">🧑‍🏫 Розбираю клієнта</button></div>
+    <span class="flabel">Вправа</span>
+    <div class="grp" id="angrp"></div><div class="pills" id="anpills"></div>
+    <div id="anstage"></div>
+    <div id="anres"></div>
+  </div>
+</div>
+<script>
+const R=d=>d*Math.PI/180, D=r=>r*180/Math.PI, lerp=(a,b,t)=>a+(b-a)*t, cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const add=(p,q)=>[p[0]+q[0],p[1]+q[1]], pol=(p,len,ang)=>[p[0]+len*Math.cos(ang),p[1]+len*Math.sin(ang)];
+function ik(H,A,L1,L2,up){ const dx=A[0]-H[0],dy=A[1]-H[1],d=Math.min(Math.hypot(dx,dy),L1+L2-0.01),a=Math.acos(cl((L1*L1+d*d-L2*L2)/(2*L1*d),-1,1)),b=Math.atan2(dy,dx); return pol(H,L1,b+(up?-a:a)); }
+function ik2(H,A,L1,L2,pick){ const a=ik(H,A,L1,L2,true),b=ik(H,A,L1,L2,false); return pick(a,b)?a:b; }
+const ang3=(a,b,c)=>{ const v1=[a[0]-b[0],a[1]-b[1]],v2=[c[0]-b[0],c[1]-b[1]]; return D(Math.acos(cl((v1[0]*v2[0]+v1[1]*v2[1])/(Math.hypot(...v1)*Math.hypot(...v2)),-1,1))); };
+const sig=x=>1/(1+Math.exp(-x));
+const MC={glu:["Сідниці","#FF4D9A"],ham:["Біцепс стегна","#9B6BFF"],quad:["Квадрицепс","#3DDC84"],back:["Поперек","#FFB020"],
+ chest:["Груди","#FF4D9A"],upchest:["Верх грудей","#FF8AD0"],delt:["Передня дельта","#FF8A3D"],tri:["Трицепс","#3DDC84"],
+ lats:["Найширші","#38C6F4"],upback:["Верх спини","#9B6BFF"],rdelt:["Задня дельта","#FF8A3D"],bic:["Біцепс","#3DDC84"]};
+const GROUND=255;
+/* ---------- templates ---------- */
+const T={
+ thrust:{name:"Ягодичний міст",l0:"Стопи ближче",l1:"Стопи далі",lv:t=>"кут у колінах "+Math.round(T.thrust.geo(t,1).knee)+"°",
+  geo(t,p){ const S=[112,150], A=[lerp(232,330,t),GROUND-6], H=[205,lerp(205,152,p)];
+    const K=ik(H,A,96,96,true), toe=[A[0]+24,GROUND], head=[S[0]-34,S[1]-6];
+    const Hd=[H[0]-8,H[1]-22], E=ik2(S,Hd,46,44,(a,b)=>a[1]<b[1]);
+    return {S,H,K,A,toe,head,E,Hd,knee:ang3(H,K,A),bar:[H[0]-6,H[1]-26],barR:34};},
+  load(g){ const k=g.knee; return {glu:0.3+0.7*Math.exp(-(((k-90)/24)**2)),ham:0.12+1.0*sig((k-104)/7),quad:0.1+0.9*sig((76-k)/6)}; },
+  tip(g){ const k=g.knee; return k<77?["warn","Стопи надто близько — коліна зігнуті сильніше 90°, вмикається квадрицепс."]:k<=104?["good","Кут у колінах близько 90° — максимум навантаження на сідниці ✓"]:["warn","Стопи далеко — ноги випрямлені, навантаження переходить на біцепс стегна."]; },
+  muscles:[["glu","H","K",0.02,-16,22,15],["ham","H","K",0.55,-11,30,9],["quad","H","K",0.5,12,32,10]],
+  equip(g){ return '<rect x="56" y="157" width="74" height="14" rx="5" fill="#3A4252"/><rect x="86" y="171" width="14" height="78" fill="#2C3340"/><rect x="62" y="248" width="62" height="7" rx="3" fill="#2C3340"/>'; },
+  bar:true, handle:"A"},
+ squat:{name:"Присідання зі штангою",l0:"Корпус нахилений",l1:"Коліна вперед",lv:t=>"нахил корпусу "+Math.round(T.squat.geo(t,1).lean)+"°",
+  geo(t,p){ const A=[196,GROUND-6], toe=[A[0]+26,GROUND], mid=A[0]+8;
+    const phi=R(lerp(3,lerp(8,40,t),p)), K=[A[0]+96*Math.sin(phi),A[1]-96*Math.cos(phi)];
+    const al=R(lerp(84,4,p)), H=[K[0]-96*Math.cos(al),K[1]-96*Math.sin(al)];
+    const sb=cl((mid-H[0])/100,-.2,.97), be=Math.asin(sb), S=[H[0]+100*sb,H[1]-100*Math.cos(be)];
+    const head=[S[0]+6,S[1]-26], Hd=[S[0]+10,S[1]-2], E=ik2(S,Hd,44,40,(a,b)=>a[1]>b[1]);
+    return {S,H,K,A,toe,head,E,Hd,lean:D(be),bar:[S[0]-2,S[1]-4],barR:30,mid,knee:ang3(H,K,A)};},
+  load(g){ const mK=Math.max(4,g.K[0]-g.mid), mH=Math.max(4,g.mid-g.H[0]); return {quad:mK*1.25,glu:mH*0.6,ham:mH*0.3,back:mH*Math.sin(R(g.lean))*0.45}; },
+  tip(g){ return g.lean>45?["warn","Сильний нахил корпусу — більше працюють сідниці, біцепс стегна й поперек. Стежте за спиною."]:g.lean<30?["good","Корпус рівний, коліна йдуть уперед — акцент на квадрицепс ✓"]:["good","Збалансований присід: квадрицепс і сідниці працюють разом ✓"]; },
+  muscles:[["quad","H","K",0.55,11,32,10],["ham","H","K",0.5,-11,28,8],["glu","H","K",0.0,-12,19,14],["back","H","S",0.25,11,22,7]],
+  arms:true, bar:true, moment:true, handle:"K"},
+ rdl:{name:"Румунська тяга",l0:"Ноги прямі",l1:"Коліна зігнуті",lv:t=>"згин у колінах "+Math.round(lerp(6,42,t))+"°",
+  geo(t,p){ const A=[200,GROUND-6], toe=[A[0]+26,GROUND], k=lerp(6,42,t);
+    const phi=R(lerp(0,k*0.45,p)), K=[A[0]+96*Math.sin(phi),A[1]-96*Math.cos(phi)];
+    const psi=R(lerp(2,k*0.55+26,p)), H=[K[0]-96*Math.sin(psi),K[1]-96*Math.cos(psi)];
+    const be=R(lerp(4,lerp(70,58,t),p)), S=[H[0]+100*Math.sin(be),H[1]-100*Math.cos(be)];
+    const bx=lerp(S[0]+4,A[0]+12,p), dy=Math.sqrt(Math.max(400,82*82-(S[0]-bx)**2)), Hd=[bx,S[1]+dy], E=ik2(S,Hd,44,40,(a,b)=>a[0]<b[0]), head=[S[0]+22*Math.sin(be)+4,S[1]-22*Math.cos(be)-8];
+    return {S,H,K,A,toe,head,E,Hd,kb:k,knee:ang3(H,K,A),bar:[Hd[0],Hd[1]+4],barR:28,lean:D(be)};},
+  load(g){ const b=g.kb; return {ham:0.25+0.85*(1-cl((b-6)/36,0,1)),glu:0.35+0.45*cl((b-6)/36,0,1),quad:0.05+0.3*cl((b-14)/28,0,1),back:0.35}; },
+  tip(g){ const b=g.kb; return b<16?["good","Ноги майже прямі — максимальне розтягнення біцепса стегна ✓"]:b<30?["good","Легкий згин колін — біцепс стегна й сідниці працюють разом ✓"]:["warn","Коліна сильно зігнуті — це вже ближче до станової тяги: більше сідниць і квадрицепса."]; },
+  muscles:[["ham","H","K",0.5,-11,30,9],["glu","H","K",0.0,-12,19,14],["quad","H","K",0.5,11,28,8],["back","H","S",0.25,11,22,7]],
+  arms:"hang", bar:true, handle:"K"},
+ lunge:{name:"Випади",l0:"Короткий крок",l1:"Довгий крок",lv:t=>"довжина кроку "+Math.round(lerp(55,95,t))+" см",
+  geo(t,p){ const step=lerp(92,168,t), Af=[262,GROUND-6], Ab=[Af[0]-step,GROUND-4], toe=[Af[0]+26,GROUND];
+    const H=[(Ab[0]+Af[0])/2+8,lerp(100,146,p)];
+    const Kb=ik2(H,Ab,96,94,(a,b)=>a[0]>b[0]), Kf=ik2(H,Af,96,96,(a,b)=>a[0]>b[0]);
+    const lean=lerp(4,lerp(4,14,t),p), S=[H[0]+100*Math.sin(R(lean)),H[1]-100*Math.cos(R(lean))], Hd=[S[0]-2,S[1]+82], E=ik2(S,Hd,44,40,(a,b)=>a[0]<b[0]);
+    return {S,H,K:Kf,A:Af,toe,Kb,Ab,head:[S[0]+4,S[1]-26],E,Hd,knee:ang3(H,Kf,Af),lean,shin:D(Math.atan2(Kf[0]-Af[0],Af[1]-Kf[1]))};},
+  load(g){ const s=g.shin; return {quad:0.15+0.9*cl((s+2)/30,0,1),glu:0.25+0.75*cl((18-s)/22,0,1),ham:0.1+0.25*cl((14-s)/20,0,1)}; },
+  tip(g){ return g.shin>18?["warn","Короткий крок — коліно далеко виходить уперед, акцент на квадрицепс."]:g.shin<6?["good","Довгий крок, гомілка майже вертикальна — максимум для сідниць ✓"]:["good","Середній крок — квадрицепс і сідниці навантажені рівномірно ✓"]; },
+  muscles:[["quad","H","K",0.55,11,30,10],["glu","H","K",0.0,-12,19,14],["ham","H","K",0.5,-11,26,8]],
+  arms:"db", handle:"Ab"},
+ press:{name:"Жим: кут лави",l0:"Горизонтально",l1:"Вертикально",lv:t=>"кут лави "+Math.round(lerp(0,80,t))+"°",
+  geo(t,p){ const a=R(lerp(0,80,t)), u=[-Math.cos(a),-Math.sin(a)], n=[-Math.sin(a),Math.cos(a)], H=[214,176];
+    const S=[H[0]+100*u[0],H[1]+100*u[1]], head=[H[0]+126*u[0]-4*n[0],H[1]+126*u[1]-4*n[1]];
+    const K=[H[0]+86,H[1]+8], A=[K[0]+8,GROUND-6], toe=[A[0]+24,GROUND];
+    const C=[H[0]+80*u[0]-22*n[0],H[1]+80*u[1]-22*n[1]], top=[S[0]-2,S[1]-86], Hd=[lerp(top[0],C[0],p),lerp(top[1],C[1]-4,p)];
+    const E=ik2(S,Hd,44,44,(x,y)=>(x[0]-S[0])*n[0]+(x[1]-S[1])*n[1]>(y[0]-S[0])*n[0]+(y[1]-S[1])*n[1]);
+    return {S,H,K,A,toe,head,E,Hd,u,n,ang:D(a),bar:Hd,barR:26,hdl:[H[0]+120*u[0]+20*n[0],H[1]+120*u[1]+20*n[1]]};},
+  load(g){ const a=g.ang; return {chest:0.15+0.85*cl(1-a/55,0,1),upchest:0.15+0.85*Math.exp(-(((a-35)/18)**2)),delt:0.15+0.85*cl((a-10)/70,0,1),tri:0.45}; },
+  tip(g){ const a=g.ang; return a<12?["good","Горизонтальна лава — основне навантаження на груди ✓"]:a<=45?["good","Нахил 30–45° — акцент на верх грудей ✓"]:a<65?["warn","Кут понад 45° — груди вимикаються, працюють передні дельти."]:["warn","Майже вертикально — це вже жим над головою: дельти й трицепс."]; },
+  muscles:[["chest","H","S",0.7,-15,22,10],["upchest","H","S",0.9,-12,13,9],["delt","S","E",0.1,0,12,10],["tri","S","E",0.55,8,17,6]],
+  equip(g){ const b=[g.H[0]+16*g.n[0],g.H[1]+16*g.n[1]], e=[g.H[0]+118*g.u[0]+16*g.n[0],g.H[1]+118*g.u[1]+16*g.n[1]];
+    return '<path d="'+cap(b,e,7,7)+'" fill="#3A4252"/><rect x="'+(g.H[0]-12)+'" y="'+(g.H[1]+12)+'" width="56" height="10" rx="4" fill="#3A4252"/><rect x="'+(g.H[0]+6)+'" y="'+(g.H[1]+22)+'" width="12" height="'+(GROUND-g.H[1]-22)+'" fill="#2C3340"/>'; },
+  plate:"back", handle:"hdl", noJoints:1},
+ benchgrip:{name:"Жим лежачи: ширина хвату",l0:"Вузький",l1:"Широкий",lv:t=>"хват "+(Math.round(lerp(42,118,t)/52*10)/10).toString().replace(".",",")+" ширини плечей",
+  geo(t,p){ const hw=lerp(42,118,t), by=lerp(118,176,p), Sl=[148,198], Sr=[252,198], Hl=[200-hw,by], Hr=[200+hw,by];
+    const el=(S,Hh,sg)=>[lerp((S[0]+Hh[0])/2,Hh[0]+sg*4,p),lerp((S[1]+Hh[1])/2+6,Hh[1]+50,p)], El=el(Sl,Hl,-1), Er=el(Sr,Hr,1);
+    return {Sl,Sr,Hl,Hr,El,Er,hw,by,hdl:Hr,c1:[150,204],c2:[196,204],c3:[250,204],c4:[204,204]};},
+  load(g){ const d=g.hw-52; return {chest:0.25+0.75*cl((d+12)/55,0,1),tri:0.15+0.85*cl((18-d)/45,0,1),delt:0.35+0.2*cl(d/60,0,1)}; },
+  tip(g){ const d=g.hw-52; return d<4?["good","Вузький хват — акцент на трицепс ✓ (жим вузьким хватом)"]:d<34?["good","Хват приблизно в 1,5 ширини плечей — груди, дельти й трицепс працюють разом ✓"]:["warn","Дуже широкий хват — більше грудей, але плечовий суглоб під ризиком. Не ширше 1,5–2 ширини плечей."]; },
+  muscles:[["chest","c1","c2",0.55,0,22,13],["chest","c3","c4",0.55,0,22,13],["delt","Sl","El",0.08,0,12,11],["delt","Sr","Er",0.08,0,12,11],["tri","Sl","El",0.55,0,20,7],["tri","Sr","Er",0.55,0,20,7]],
+  front:"bench", handle:"hdl"},
+ row:{name:"Тяга в нахилі",l0:"До пояса",l1:"До грудей",lv:t=>"тяга до "+(t<.35?"пояса":t<.65?"низу грудей":"грудей"),
+  geo(t,p){ const A=[196,GROUND-6], toe=[A[0]+26,GROUND], phi=R(10), K=[A[0]+96*Math.sin(phi),A[1]-96*Math.cos(phi)], psi=R(38), H=[K[0]-96*Math.sin(psi),K[1]-96*Math.cos(psi)];
+    const be=R(66), S=[H[0]+100*Math.sin(be),H[1]-100*Math.cos(be)], d=[S[0]-H[0],S[1]-H[1]], L=Math.hypot(...d), n=[d[1]/L,-d[0]/L];
+    const f=lerp(0.22,0.8,t), tg=[H[0]+d[0]*f-n[0]*18,H[1]+d[1]*f-n[1]*18], hang=[S[0]+2,S[1]+84], Hd=[lerp(hang[0],tg[0],p),lerp(hang[1],tg[1],p)];
+    const E=ik2(S,Hd,44,42,(x,y)=>(x[0]-S[0])*n[0]+(x[1]-S[1])*n[1]>(y[0]-S[0])*n[0]+(y[1]-S[1])*n[1]), head=[S[0]+22*Math.sin(be)+4,S[1]-22*Math.cos(be)-8];
+    return {S,H,K,A,toe,head,E,Hd,bar:Hd,barR:24,t};},
+  load(g){ const t=g.t; return {lats:0.3+0.7*(1-t),upback:0.25+0.75*t,rdelt:0.12+0.55*t,bic:0.35,back:0.28}; },
+  tip(g){ const t=g.t; return t<.35?["good","Тяга до пояса, лікті вздовж корпусу — акцент на найширші ✓"]:t<.65?["good","Тяга до низу грудей — найширші й верх спини працюють разом ✓"]:["good","Тяга до грудей, лікті в сторони — акцент на верх спини й задні дельти ✓"]; },
+  muscles:[["lats","H","S",0.5,10,30,11],["upback","H","S",0.86,10,18,10],["back","H","S",0.18,10,16,7],["rdelt","S","E",0.08,4,10,9],["bic","S","E",0.55,-7,16,6]],
+  plate:"front", handle:"Hd"},
+ pulldown:{name:"Тяга верхнього блока",l0:"Вузький хват",l1:"Широкий хват",lv:t=>"хват "+(Math.round(lerp(34,118,t)/50*10)/10).toString().replace(".",",")+" ширини плечей",
+  geo(t,p){ const hw=lerp(34,118,t), by=lerp(60,138,p), Sl=[150,152], Sr=[250,152], Hl=[200-hw,by], Hr=[200+hw,by];
+    const el=(S,Hh,sg)=>[lerp((S[0]+Hh[0])/2,Hh[0]+sg*4,p),lerp((S[1]+Hh[1])/2+6,Hh[1]+50,p)], El=el(Sl,Hl,-1), Er=el(Sr,Hr,1);
+    return {Sl,Sr,Hl,Hr,El,Er,hw,by,hdl:Hr,l1:[154,176],l2:[182,236],r1:[246,176],r2:[218,236],u1:[166,158],u2:[194,166],u3:[234,158],u4:[206,166]};},
+  load(g){ const d=g.hw-50; return {lats:0.35+0.65*cl((d+5)/45,0,1)-0.2*cl((d-55)/20,0,1),bic:0.15+0.85*cl((20-d)/45,0,1),upback:0.3+0.3*cl(d/60,0,1)}; },
+  tip(g){ const d=g.hw-50; return d<5?["good","Вузький хват — більше біцепса й нижньої частини найширших ✓"]:d<=50?["good","Хват трохи ширший за плечі — найширші працюють найкраще ✓"]:["warn","Дуже широкий хват — менша амплітуда й більше навантаження на плечовий суглоб."]; },
+  muscles:[["lats","l1","l2",0.5,0,32,13],["lats","r1","r2",0.5,0,32,13],["upback","u1","u2",0.5,0,14,8],["upback","u3","u4",0.5,0,14,8],["bic","Sl","El",0.55,0,18,7],["bic","Sr","Er",0.55,0,18,7]],
+  front:"pull", handle:"hdl"}
+};
+
+/* ---------- joint movements ---------- */
+const rot=(v,a)=>[v[0]*Math.cos(a)+v[1]*Math.sin(a),-v[0]*Math.sin(a)+v[1]*Math.cos(a)];
+Object.assign(MC,{bicl:["Довга голівка біцепса","#3DDC84"],bics:["Коротка голівка біцепса","#38C6F4"],brach:["Плечовий м’яз","#9B6BFF"],
+ tril:["Довга голівка трицепса","#3DDC84"],trim:["Латеральна й медіальна голівки","#38C6F4"],mdelt:["Середня дельта","#FF8A3D"],trap:["Трапеція","#9B6BFF"],supra:["Надостний м’яз","#38C6F4"],
+ lochest:["Низ грудей","#FF4D9A"],gmed:["Середній сідничний","#FF4D9A"],addu:["Привідні м’язи","#9B6BFF"],extrot:["Підостний і малий круглий","#3DDC84"],introt:["Підлопатковий м’яз","#FF8A3D"]});
+function sideStand(g,extra){ const H=[250,152],S=[250,56],K=[253,204],A=[252,GROUND-6];
+  return seg(A,[A[0]+24,GROUND],7,5)+seg(K,A,11,7)+seg(H,K,17,11)+seg(H,S,17,19)+`<circle cx="254" cy="30" r="15" fill="url(#headg)" stroke="#2B3140" stroke-width="1.4"/>`; }
+function frontStand(){ let h=`<ellipse cx="200" cy="${GROUND+2}" rx="60" ry="5" fill="#000" opacity=".45" filter="url(#sh)"/>`;
+  h+=seg([180,160],[178,206],15,11)+seg([178,206],[179,GROUND-6],11,7)+seg([220,160],[222,206],15,11)+seg([222,206],[221,GROUND-6],11,7);
+  h+=`<rect x="192" y="58" width="16" height="18" rx="6" class="bd"/><circle cx="200" cy="44" r="17" fill="url(#headg)" stroke="#2B3140" stroke-width="1.4"/>`;
+  h+=`<path d="M136,86 Q138,72 154,72 L246,72 Q262,72 264,86 L236,158 Q234,166 226,166 L174,166 Q166,166 164,158 Z" class="bd"/>`; return h; }
+const db=(p)=>`<rect x="${p[0]-12}" y="${p[1]-5}" width="24" height="10" rx="4" fill="#4A5366" stroke="#2B3140"/>`;
+Object.assign(T,{
+ curl:{grp:"flex",mv:"Згинання ліктя",name:"Згинання рук на біцепс",l0:"Лікоть позаду",l1:"Лікоть попереду",
+  lv:t=>{ const b=Math.round(lerp(-35,45,t)); return b<0?"лікоть позаду на "+(-b)+"°":"лікоть попереду на "+b+"°"; },
+  geo(t,p){ const b=R(lerp(-35,45,t)), S=[250,60], E=[S[0]+46*Math.sin(b),S[1]+46*Math.cos(b)], ph=R(lerp(D(b)+8,90,p)), Hd=[E[0]+42*Math.sin(ph),E[1]+42*Math.cos(ph)];
+    return {S,E,Hd,b:D(b),hdl:Hd}; },
+  load(g){ const b=g.b; return {bicl:0.3+0.7*cl((10-b)/45,0,1),bics:0.3+0.7*cl((b+10)/50,0,1),brach:0.3+0.5*cl(b/45,0,1)}; },
+  tip(g){ const b=g.b; return b<-10?["good","Лікоть позаду (згинання на похилій лаві) — розтягнута довга голівка біцепса ✓"]:b>20?["good","Лікоть попереду (лава Скотта) — акцент на коротку голівку й плечовий м’яз ✓"]:["good","Лікоть біля корпусу — класичне згинання, обидві голівки працюють ✓"]; },
+  muscles:[["bicl","S","E",0.38,8,13,6],["bics","S","E",0.66,8,11,6],["brach","S","E",0.82,-1,9,6]],
+  draw(g,L,mx){ return sideStand(g)+this.muscles.map(m=>muscleAt(g,m,L[m[0]]/mx)).join("")+seg(g.S,g.E,9,7.5)+seg(g.E,g.Hd,7.5,6)+db(g.Hd)+`<circle cx="${g.E[0]}" cy="${g.E[1]}" r="4.5" fill="#fff" stroke="#11141A" stroke-width="1.5"/>`; },
+  handle:"hdl"},
+ triext:{grp:"flex",mv:"Розгинання ліктя",name:"Розгинання рук на трицепс",l0:"Руки внизу",l1:"Руки над головою",lv:t=>"плече піднято на "+Math.round(lerp(0,165,t))+"°",
+  geo(t,p){ const gm=R(lerp(0,165,t)), S=[250,60], u=[Math.sin(gm),Math.cos(gm)], E=[S[0]+46*u[0],S[1]+46*u[1]], th=R(lerp(172,88,p)), f=rot(u,Math.PI-th), Hd=[E[0]+42*f[0],E[1]+42*f[1]];
+    return {S,E,Hd,gm:D(gm),hdl:Hd}; },
+  load(g){ const x=g.gm; return {tril:0.3+0.7*cl(x/150,0,1),trim:0.35+0.65*cl(1-x/150,0,1)}; },
+  tip(g){ const x=g.gm; return x<40?["good","Руки внизу (розгинання на блоці) — акцент на латеральну й медіальну голівки ✓"]:x>110?["good","Руки над головою — довга голівка трицепса розтягнута й працює найбільше ✓"]:["good","Плече під кутом (французький жим лежачи) — працюють усі голівки ✓"]; },
+  muscles:[["tril","S","E",0.4,-8,14,6],["trim","S","E",0.7,-7,11,6]],
+  draw(g,L,mx){ return sideStand(g)+this.muscles.map(m=>muscleAt(g,m,L[m[0]]/mx)).join("")+seg(g.S,g.E,9,7.5)+seg(g.E,g.Hd,7.5,6)+db(g.Hd)+`<circle cx="${g.E[0]}" cy="${g.E[1]}" r="4.5" fill="#fff" stroke="#11141A" stroke-width="1.5"/>`; },
+  handle:"hdl"},
+ lat:{grp:"abd",mv:"Відведення плеча",name:"Махи в сторони",l0:"Низько",l1:"Вище голови",lv:t=>"підйом до "+Math.round(lerp(50,130,t))+"°",
+  geo(t,p){ const am=lerp(50,130,t), a=R(lerp(10,am,p)), Sl=[150,84], Sr=[250,84], ar=[Math.sin(a),Math.cos(a)];
+    const Er=[Sr[0]+48*ar[0],Sr[1]+48*ar[1]], Hr=[Sr[0]+90*ar[0],Sr[1]+90*ar[1]], El=[Sl[0]-48*ar[0],Sl[1]+48*ar[1]], Hl=[Sl[0]-90*ar[0],Sl[1]+90*ar[1]];
+    return {Sl,Sr,El,Er,Hl,Hr,am,hdl:Hr,t1:[188,70],t2:[156,78],t3:[212,70],t4:[244,78]}; },
+  load(g){ const a=g.am; return {mdelt:0.5+0.5*cl(a/90,0,1)-0.25*cl((a-95)/35,0,1),trap:0.1+0.9*cl((a-85)/35,0,1),supra:0.15+0.3*(1-cl(a/70,0,1))}; },
+  tip(g){ const a=g.am; return a<75?["warn","Неповна амплітуда — дельта не отримує пікового навантаження. Піднімайте до рівня плечей."]:a<=100?["good","До рівня плечей — максимум для середньої дельти ✓"]:["warn","Вище плечей — вмикається трапеція, а дельта розвантажується."]; },
+  muscles:[["mdelt","Sr","Er",0.1,0,15,12],["mdelt","Sl","El",0.1,0,15,12],["trap","t1","t2",0.5,0,17,7],["trap","t3","t4",0.5,0,17,7],["supra","t2","Sl",0.3,4,8,5],["supra","t4","Sr",0.3,-4,8,5]],
+  draw(g,L,mx){ return frontStand()+this.muscles.map(m=>muscleAt(g,m,L[m[0]]/mx)).join("")+seg(g.Sl,g.El,11,9)+seg(g.El,g.Hl,9,7)+seg(g.Sr,g.Er,11,9)+seg(g.Er,g.Hr,9,7)+db(g.Hl)+db(g.Hr); },
+  handle:"hdl"},
+ fly:{grp:"abd",mv:"Приведення плеча",name:"Зведення рук у кросовері",l0:"Блоки вгорі",l1:"Блоки внизу",lv:t=>"блоки "+(t<.33?"вгорі":t<.66?"на рівні плечей":"внизу"),
+  geo(t,p){ const py=lerp(30,236,t), Pl=[22,py], Pr=[378,py], Sl=[150,84], Sr=[250,84], M=lerp(204,96,t);
+    const o=(S,P)=>{ const d=[P[0]-S[0],P[1]-S[1]],L=Math.hypot(...d); return [S[0]+92*d[0]/L,S[1]+92*d[1]/L]; };
+    const Hr=[lerp(o(Sr,Pr)[0],208,p),lerp(o(Sr,Pr)[1],M,p)], Hl=[lerp(o(Sl,Pl)[0],192,p),lerp(o(Sl,Pl)[1],M,p)];
+    const Er=[(Sr[0]+Hr[0])/2+12,(Sr[1]+Hr[1])/2+8], El=[(Sl[0]+Hl[0])/2-12,(Sl[1]+Hl[1])/2+8];
+    return {Pl,Pr,Sl,Sr,Hl,Hr,El,Er,t,hdl:Pr,u1:[158,90],u2:[196,88],u3:[242,90],u4:[204,88],m1:[156,106],m2:[196,106],m3:[244,106],m4:[204,106],l1:[160,124],l2:[196,128],l3:[240,124],l4:[204,128]}; },
+  load(g){ const t=g.t; return {lochest:0.2+0.8*cl((0.6-t)/0.6,0,1),chest:0.55+0.35*(1-Math.abs(t-0.5)*2),upchest:0.2+0.8*cl((t-0.4)/0.6,0,1),delt:0.2+0.4*t}; },
+  tip(g){ const t=g.t; return t<.33?["good","Блоки вгорі, зводьте вниз — акцент на низ грудей ✓"]:t<.66?["good","Блоки на рівні плечей — середина грудей ✓"]:["good","Блоки внизу, зводьте вгору — акцент на верх грудей ✓"]; },
+  muscles:[["upchest","u1","u2",0.5,0,17,7],["upchest","u3","u4",0.5,0,17,7],["chest","m1","m2",0.5,0,19,8],["chest","m3","m4",0.5,0,19,8],["lochest","l1","l2",0.5,0,17,7],["lochest","l3","l4",0.5,0,17,7],["delt","Sl","El",0.08,0,11,10],["delt","Sr","Er",0.08,0,11,10]],
+  draw(g,L,mx){ let h=`<rect x="8" y="10" width="14" height="${GROUND-10}" rx="4" fill="#2C3340"/><rect x="378" y="10" width="14" height="${GROUND-10}" rx="4" fill="#2C3340"/>`+frontStand();
+    h+=this.muscles.map(m=>muscleAt(g,m,L[m[0]]/mx)).join("")+seg(g.Sl,g.El,11,9)+seg(g.El,g.Hl,9,7)+seg(g.Sr,g.Er,11,9)+seg(g.Er,g.Hr,9,7);
+    h+=`<line x1="${g.Pl[0]}" y1="${g.Pl[1]}" x2="${g.Hl[0]}" y2="${g.Hl[1]}" stroke="#AEB6C6" stroke-width="1.6"/><line x1="${g.Pr[0]}" y1="${g.Pr[1]}" x2="${g.Hr[0]}" y2="${g.Hr[1]}" stroke="#AEB6C6" stroke-width="1.6"/>`;
+    [g.Pl,g.Pr].forEach(q=>h+=`<circle cx="${q[0]}" cy="${q[1]}" r="8" fill="#4A5366" stroke="#AEB6C6" stroke-width="2"/>`); [g.Hl,g.Hr].forEach(q=>h+=`<circle cx="${q[0]}" cy="${q[1]}" r="6.5" fill="url(#skin)" stroke="#2B3140"/>`); return h; },
+  handle:"hdl"},
+ hip:{grp:"abd",mv:"Відведення / приведення стегна",name:"Відведення й приведення ноги",l0:"Приведення",l1:"Відведення",
+  lv:t=>{ const a=Math.round(t<.5?-lerp(25,0,t*2):lerp(0,45,(t-.5)*2)); return a<0?"приведення на "+(-a)+"°":a>0?"відведення на "+a+"°":"нейтрально 0°"; },
+  geo(t,p){ const am=t<.5?-lerp(25,0,t*2):lerp(0,45,(t-.5)*2), a=R(am*p), Hr=[220,160], K=[Hr[0]+46*Math.sin(a),Hr[1]+46*Math.cos(a)], F=[Hr[0]+92*Math.sin(a),Hr[1]+92*Math.cos(a)];
+    return {Hr,K,F,am,t,hdl:F,g1:[224,140],g2:[248,152],Pp:t>=.5?[30,GROUND-14]:[370,GROUND-14]}; },
+  load(g){ const t=g.t; return {gmed:0.12+0.88*cl((t-0.45)/0.5,0,1),addu:0.12+0.88*cl((0.55-t)/0.5,0,1)}; },
+  tip(g){ const t=g.t; return t<.4?["good","Приведення — працюють привідні м’язи внутрішньої поверхні стегна ✓"]:t>.6?["good","Відведення — працює середній сідничний (бічна частина сідниць) ✓"]:["warn","Нога під тазом — навантаження мінімальне. Рухайте ногу вбік або всередину."]; },
+  muscles:[["gmed","g1","g2",0.5,0,17,11],["addu","Hr","K",0.45,6,20,7]],
+  draw(g,L,mx){ const P=g.Pp;
+    let h=`<ellipse cx="200" cy="${GROUND+2}" rx="60" ry="5" fill="#000" opacity=".45" filter="url(#sh)"/>`+seg([180,160],[178,206],15,11)+seg([178,206],[179,GROUND-6],11,7);
+    h+=`<rect x="192" y="58" width="16" height="18" rx="6" class="bd"/><circle cx="200" cy="44" r="17" fill="url(#headg)" stroke="#2B3140" stroke-width="1.4"/><path d="M136,86 Q138,72 154,72 L246,72 Q262,72 264,86 L236,158 Q234,166 226,166 L174,166 Q166,166 164,158 Z" class="bd"/>`;
+    h+=seg([150,84],[132,170],11,8)+seg([250,84],[268,170],11,8);
+    h+=this.muscles.map(m=>muscleAt(g,m,L[m[0]]/mx)).join("")+seg(g.Hr,g.K,15,11)+seg(g.K,g.F,11,7);
+    h+=`<line x1="${P[0]}" y1="${P[1]}" x2="${g.F[0]}" y2="${g.F[1]}" stroke="#AEB6C6" stroke-width="1.6"/><circle cx="${P[0]}" cy="${P[1]}" r="8" fill="#4A5366" stroke="#AEB6C6" stroke-width="2"/><rect x="${g.F[0]-9}" y="${g.F[1]-6}" width="18" height="8" rx="3" fill="#4A5366"/>`; return h; },
+  handle:"hdl"},
+ rot:{grp:"rot",mv:"Обертання плеча (вид згори)",name:"Обертання плеча з блоком",l0:"Всередину",l1:"Назовні",noGround:1,
+  lv:t=>{ const r=Math.round(lerp(-70,85,t)); return r<0?"обертання всередину на "+(-r)+"°":"обертання назовні на "+r+"°"; },
+  geo(t,p){ const rm=lerp(-70,85,t), r=R(rm*p), E=[268,150], Hd=[E[0]+74*Math.sin(r),E[1]+74*Math.cos(r)];
+    return {E,Hd,rm,t,hdl:Hd,Pp:t>=.5?[20,226]:[380,226],e1:[250,118],e2:[284,126],i1:[246,160],i2:[276,162],c1:[206,160],c2:[236,160]}; },
+  load(g){ const t=g.t; return {extrot:0.1+0.9*cl((t-0.4)/0.6,0,1),introt:0.1+0.9*cl((0.5-t)/0.5,0,1),chest:0.05+0.45*cl((0.45-t)/0.45,0,1),rdelt:0.08+0.3*cl((t-0.5)/0.5,0,1)}; },
+  tip(g){ const t=g.t; return t>.6?["good","Зовнішнє обертання — працюють підостний і малий круглий (ротаторна манжета) ✓ Лікоть притиснутий до корпусу."]:t<.4?["good","Внутрішнє обертання — працюють підлопатковий м’яз і груди ✓"]:["warn","Рука майже нерухома — ротатори майже не навантажені."]; },
+  muscles:[["extrot","e1","e2",0.5,0,18,8],["introt","i1","i2",0.5,0,15,7],["chest","c1","c2",0.5,0,16,8],["rdelt","e2","E",0.3,0,9,7]],
+  draw(g,L,mx){ const P=g.Pp; let h=`<rect x="0" y="0" width="400" height="290" fill="#0E1116"/>`;
+    for(let x=20;x<400;x+=40) h+=`<line x1="${x}" y1="0" x2="${x}" y2="290" stroke="#161A21"/>`; for(let y=20;y<290;y+=40) h+=`<line x1="0" y1="${y}" x2="400" y2="${y}" stroke="#161A21"/>`;
+    h+=`<text x="200" y="278" fill="#5D677B" font-size="11" text-anchor="middle">вид згори · обличчя вниз</text>`;
+    h+=`<ellipse cx="200" cy="140" rx="78" ry="28" class="bd"/>`+this.muscles.map(m=>muscleAt(g,m,L[m[0]]/mx)).join("");
+    h+=`<circle cx="132" cy="146" r="13" class="bd"/><circle cx="268" cy="146" r="13" class="bd"/><circle cx="200" cy="138" r="21" fill="url(#headg)" stroke="#2B3140" stroke-width="1.4"/><ellipse cx="200" cy="160" rx="7" ry="4" fill="#5D677B"/>`;
+    const a0=g.E[1]+34; h+=`<path d="M${g.E[0]},${a0} A34 34 0 0 ${g.rm>0?0:1} ${g.E[0]+34*Math.sin(R(g.rm))},${g.E[1]+34*Math.cos(R(g.rm))}" stroke="#FFB020" stroke-width="2" stroke-dasharray="4 4" fill="none"/>`;
+    h+=`<line x1="${g.E[0]}" y1="${g.E[1]}" x2="${g.E[0]}" y2="${g.E[1]+80}" stroke="#ffffff40" stroke-dasharray="3 4"/>`;
+    h+=seg(g.E,g.Hd,8,6.5)+`<line x1="${P[0]}" y1="${P[1]}" x2="${g.Hd[0]}" y2="${g.Hd[1]}" stroke="#AEB6C6" stroke-width="1.6"/><circle cx="${P[0]}" cy="${P[1]}" r="8" fill="#4A5366" stroke="#AEB6C6" stroke-width="2"/><circle cx="${g.Hd[0]}" cy="${g.Hd[1]}" r="6.5" fill="url(#skin)" stroke="#2B3140"/>`;
+    return h; },
+  handle:"hdl"}
+});
+["thrust","squat","rdl","lunge"].forEach(k=>{T[k].grp="legs";}); ["press","benchgrip"].forEach(k=>T[k].grp="press"); ["row","pulldown"].forEach(k=>T[k].grp="pull");
+T.thrust.mv="Розгинання стегна"; T.squat.mv="Згинання / розгинання коліна й стегна"; T.rdl.mv="Згинання / розгинання стегна"; T.lunge.mv="Згинання / розгинання коліна й стегна";
+T.press.mv="Згинання плеча й розгинання ліктя"; T.benchgrip.mv="Приведення плеча й розгинання ліктя"; T.row.mv="Розгинання плеча й згинання ліктя"; T.pulldown.mv="Приведення плеча й згинання ліктя";
+const GRP=[["legs","Ноги"],["press","Жими"],["pull","Тяги"],["flex","Згинання / розгинання"],["abd","Відведення / приведення"],["rot","Обертання"]];
+
+/* ---------- planes ---------- */
+const PL={sag:{n:"Сагітальна",c:"#4EA1FF",d:"ділить тіло на ліву й праву половини. Рухи вперед-назад: <b>згинання й розгинання</b> (присідання, тяги, жими під кутом, біцепс, трицепс)."},
+ fro:{n:"Фронтальна",c:"#3DDC84",d:"ділить тіло на передню й задню половини. Рухи вбік: <b>відведення й приведення</b> (махи в сторони, тяга верхнього блока, відведення ноги)."},
+ hor:{n:"Горизонтальна",c:"#FFB020",d:"(поперечна) ділить тіло на верхню й нижню половини. <b>Обертання</b> й горизонтальне приведення/відведення (жим лежачи, кросовер, ротатори)."}};
+const PLV={thrust:["sag","screen"],squat:["sag","screen"],rdl:["sag","screen"],lunge:["sag","screen"],press:["sag","screen"],row:["sag","screen"],curl:["sag","screen"],triext:["sag","screen"],
+ benchgrip:["hor","screen"],pulldown:["fro","screen"],lat:["fro","screen"],hip:["fro","screen"],fly:["hor",["h",100]],rot:["hor","screen"]};
+Object.keys(PLV).forEach(k=>{T[k].pl=PLV[k][0]; T[k].pv=PLV[k][1];});
+function plIcon(k){ const c=PL[k].c; let p="";
+  if(k==="sag") p=`<path d="M22,4 L34,10 L34,38 L22,32 Z" fill="${c}" opacity=".45" stroke="${c}"/>`;
+  if(k==="fro") p=`<rect x="8" y="6" width="28" height="30" rx="2" fill="${c}" opacity=".4" stroke="${c}"/>`;
+  if(k==="hor") p=`<path d="M6,22 L30,22 L38,16 L14,16 Z" fill="${c}" opacity=".5" stroke="${c}"/>`;
+  const fig=`<circle cx="22" cy="9" r="4" fill="#C9D2E2"/><rect x="18" y="14" width="8" height="13" rx="3" fill="#C9D2E2"/><rect x="18.5" y="26" width="3" height="11" rx="1.5" fill="#C9D2E2"/><rect x="22.5" y="26" width="3" height="11" rx="1.5" fill="#C9D2E2"/><rect x="14" y="15" width="3" height="11" rx="1.5" fill="#C9D2E2"/><rect x="27" y="15" width="3" height="11" rx="1.5" fill="#C9D2E2"/>`;
+  return `<svg viewBox="0 0 44 40">${k==="hor"?fig+p:p+fig}</svg>`; }
+function planeLayer(tp){ const P=PL[tp.pl]; if(!P) return ""; const c=P.c;
+  if(tp.pv==="screen") return `<rect x="4" y="4" width="392" height="282" rx="16" fill="${c}" opacity=".1" stroke="${c}" stroke-opacity=".7" stroke-width="2" stroke-dasharray="7 6"/><text x="388" y="${tp.noGround?22:278}" fill="${c}" font-size="11.5" font-weight="700" text-anchor="end">${P.n} площина</text>`;
+  const [o,v]=tp.pv; return o==="h"?`<path d="M0,${v+14} L60,${v-14} L400,${v-14} L340,${v+14} Z" fill="${c}" opacity=".12" stroke="${c}" stroke-opacity=".6" stroke-dasharray="6 5"/><text x="392" y="${v-20}" fill="${c}" font-size="11.5" font-weight="700" text-anchor="end">${P.n} площина</text>`
+    :`<line x1="${v}" y1="0" x2="${v}" y2="290" stroke="${c}" stroke-width="2" stroke-dasharray="6 5"/>`; }
+
+/* ---------- load vectors ---------- */
+const DOWN=[0,1], unit=(a,b)=>{ const d=[b[0]-a[0],b[1]-a[1]],L=Math.hypot(...d)||1; return [d[0]/L,d[1]/L]; };
+const VJ={H:["Стегно (кульшовий)","#FF4D9A"],K:["Коліно","#3DDC84"],S:["Плече","#FF8A3D"],E:["Лікоть","#38C6F4"],Sr:["Плече","#FF8A3D"],Er:["Лікоть","#38C6F4"],Hr:["Кульшовий суглоб","#FF4D9A"]};
+const VEC={
+ thrust:g=>({P:g.A,d:[0,-1],f:"Реакція опори",j:["K","H"]}),
+ squat:g=>({P:g.bar,d:DOWN,f:"Вага штанги",j:["K","H"]}),
+ rdl:g=>({P:g.bar,d:DOWN,f:"Вага штанги",j:["H","K"]}),
+ lunge:g=>({P:g.Hd,d:DOWN,f:"Вага гантелей",j:["K","H"]}),
+ press:g=>({P:g.Hd,d:DOWN,f:"Вага штанги",j:["S","E"]}),
+ row:g=>({P:g.Hd,d:DOWN,f:"Вага штанги",j:["S","E","H"]}),
+ benchgrip:g=>({P:g.Hr,d:DOWN,f:"Вага штанги",j:["Sr","Er"]}),
+ pulldown:g=>({P:g.Hr,d:unit(g.Hr,[200,0]),f:"Тяга блока",j:["Sr","Er"]}),
+ curl:g=>({P:g.Hd,d:DOWN,f:"Вага гантелі",j:["E","S"]}),
+ triext:g=>({P:g.Hd,d:DOWN,f:"Вага гантелі",j:["E","S"]}),
+ lat:g=>({P:g.Hr,d:DOWN,f:"Вага гантелі",j:["Sr"]}),
+ fly:g=>({P:g.Hr,d:unit(g.Hr,g.Pr),f:"Тяга троса",j:["Sr"]}),
+ hip:g=>({P:g.F,d:unit(g.F,g.Pp),f:"Тяга троса",j:["Hr"]}),
+ rot:g=>({P:g.Hd,d:unit(g.Hd,g.Pp),f:"Тяга троса",j:["E"]})};
+const PXCM=0.47;
+function vecData(k,g){ const v=VEC[k]&&VEC[k](g); if(!v) return null;
+  v.arms=v.j.map(n=>{ const J=g[n]; if(!J) return null; const r=[J[0]-v.P[0],J[1]-v.P[1]], t=r[0]*v.d[0]+r[1]*v.d[1], F=[v.P[0]+v.d[0]*t,v.P[1]+v.d[1]*t], a=Math.abs(r[0]*v.d[1]-r[1]*v.d[0]);
+    return {n,J,F,a,cm:Math.round(a*PXCM)}; }).filter(Boolean); return v; }
+function vecLayer(tp,g){ const v=vecData(st.k,g); if(!v) return ""; const P=v.P,d=v.d; let h="";
+  h+=`<line x1="${P[0]-d[0]*500}" y1="${P[1]-d[1]*500}" x2="${P[0]+d[0]*500}" y2="${P[1]+d[1]*500}" stroke="#fff" stroke-width="1.2" stroke-dasharray="5 5" opacity=".55"/>`;
+  v.arms.forEach(m=>{ const c=VJ[m.n][1]; if(m.a<2){ h+=`<circle cx="${m.J[0]}" cy="${m.J[1]}" r="8" fill="none" stroke="${c}" stroke-width="2"/>`; return; }
+    h+=`<line x1="${m.J[0]}" y1="${m.J[1]}" x2="${m.F[0]}" y2="${m.F[1]}" stroke="${c}" stroke-width="3.2" stroke-linecap="round"/><circle cx="${m.J[0]}" cy="${m.J[1]}" r="5" fill="${c}" stroke="#11141A" stroke-width="1.5"/>`;
+    const q=unit(m.F,m.J), s=6; h+=`<path d="M${m.F[0]+q[0]*s},${m.F[1]+q[1]*s} l${d[0]*s},${d[1]*s} l${-q[0]*s},${-q[1]*s}" stroke="${c}" fill="none" stroke-width="1.5"/>`;
+    const mx=(m.J[0]+m.F[0])/2, my=(m.J[1]+m.F[1])/2; h+=`<g transform="translate(${mx},${my-9})"><rect x="-17" y="-8" width="34" height="15" rx="7" fill="#0B0D11cc" stroke="${c}"/><text y="3.5" fill="#fff" font-size="9.5" font-weight="700" text-anchor="middle">${m.cm} см</text></g>`; });
+  const e=[P[0]+d[0]*58,P[1]+d[1]*58], n=[-d[1],d[0]];
+  h+=`<line x1="${P[0]}" y1="${P[1]}" x2="${e[0]-d[0]*8}" y2="${e[1]-d[1]*8}" stroke="#4EA1FF" stroke-width="5" stroke-linecap="round"/><path d="M${e[0]},${e[1]} L${e[0]-d[0]*14+n[0]*8},${e[1]-d[1]*14+n[1]*8} L${e[0]-d[0]*14-n[0]*8},${e[1]-d[1]*14-n[1]*8} Z" fill="#4EA1FF"/><circle cx="${P[0]}" cy="${P[1]}" r="4" fill="#4EA1FF"/>`;
+  h+=`<text x="${e[0]+n[0]*14+6}" y="${e[1]+n[1]*14}" fill="#4EA1FF" font-size="11" font-weight="800">F</text>`;
+  return h; }
+function vecPanel(k,g){ const v=vecData(k,g); if(!v) return ""; const mx=Math.max(1,...v.arms.map(m=>m.a));
+  return `<div class="vh">↘ <b>Вектор навантаження:</b> ${v.f}. Пунктир — лінія дії сили. Кольорові відрізки — плечі сили: чим довше плече, тим більший момент і тим сильніше працюють м’язи цього суглоба.</div>`+
+    v.arms.map(m=>`<div class="bar"><b style="color:${VJ[m.n][1]}">${VJ[m.n][0]}</b><i><u style="width:${Math.round(m.a/mx*100)}%;background:${VJ[m.n][1]}"></u></i><span>${m.cm} см</span></div>`).join(""); }
+/* ---------- drawing ---------- */
+function cap(a,b,w1,w2){ const ang=Math.atan2(b[1]-a[1],b[0]-a[0]),n=ang+Math.PI/2,c=Math.cos(n),s=Math.sin(n);
+  const p1=[a[0]+c*w1,a[1]+s*w1],p2=[b[0]+c*w2,b[1]+s*w2],p3=[b[0]-c*w2,b[1]-s*w2],p4=[a[0]-c*w1,a[1]-s*w1];
+  return `M${p1} L${p2} A${w2} ${w2} 0 0 1 ${p3} L${p4} A${w1} ${w1} 0 0 1 ${p1}Z`; }
+const seg=(a,b,w1,w2,cls)=>`<path d="${cap(a,b,w1,w2)}" class="${cls||"bd"}"/>`;
+function frontBody(tp,g,L,mx){ let h="";
+  if(tp.front==="bench"){ h+='<rect x="168" y="214" width="64" height="14" rx="5" fill="#3A4252"/><rect x="194" y="228" width="12" height="'+(GROUND-228)+'" fill="#2C3340"/><rect x="170" y="'+(GROUND-6)+'" width="60" height="6" rx="3" fill="#2C3340"/>';
+    h+='<circle cx="200" cy="182" r="17" fill="url(#headg)" stroke="#2B3140" stroke-width="1.4"/>';
+    h+='<path d="M136,196 Q136,186 150,186 L250,186 Q264,186 264,196 L258,226 Q256,234 246,234 L154,234 Q144,234 142,226 Z" class="bd"/>'; }
+  else { h+='<rect x="160" y="246" width="80" height="12" rx="5" fill="#3A4252"/><rect x="194" y="258" width="12" height="'+(GROUND-258)+'" fill="#2C3340"/>';
+    h+='<line x1="200" y1="0" x2="200" y2="'+g.by+'" stroke="#6B7589" stroke-width="2"/>';
+    h+='<rect x="192" y="128" width="16" height="22" rx="6" class="bd"/><circle cx="200" cy="118" r="18" fill="url(#headg)" stroke="#2B3140" stroke-width="1.4"/>';
+    h+='<path d="M134,156 Q136,144 152,144 L248,144 Q264,144 266,156 L236,244 Q234,250 226,250 L174,250 Q166,250 164,244 Z" class="bd"/>'; }
+  h+=tp.muscles.map(mu=>muscleAt(g,mu,L[mu[0]]/mx)).join("");
+  h+=seg(g.Sl,g.El,11,9)+seg(g.El,g.Hl,9,7.5)+seg(g.Sr,g.Er,11,9)+seg(g.Er,g.Hr,9,7.5);
+  const bx=tp.front==="bench"?150:140, bend=tp.front==="pull"?10:0;
+  h+='<path d="M'+(200-bx)+','+(g.by+bend)+' Q200,'+(g.by-bend)+' '+(200+bx)+','+(g.by+bend)+'" stroke="#AEB6C6" stroke-width="5" fill="none" stroke-linecap="round"/>';
+  if(tp.front==="bench") h+='<rect x="'+(200-bx-4)+'" y="'+(g.by-36)+'" width="12" height="72" rx="3" fill="#2E3543" stroke="#4A5366" stroke-width="2"/><rect x="'+(200+bx-8)+'" y="'+(g.by-36)+'" width="12" height="72" rx="3" fill="#2E3543" stroke="#4A5366" stroke-width="2"/>';
+  [g.Hl,g.Hr].forEach(q=>h+='<circle cx="'+q[0]+'" cy="'+q[1]+'" r="6.5" fill="url(#skin)" stroke="#2B3140"/>');
+  if(tp.front==="bench") h+='<path d="M'+(200+g.hw*0+0)+','+(g.by+42)+' v16 m-6,-7 l6,7 l6,-7" stroke="#4EA1FF" stroke-width="3" fill="none" stroke-linecap="round" opacity="0"/>';
+  return h; }
+function muscleAt(g,[m,j1,j2,f,off,rx,ry],v){ const a=g[j1],b=g[j2],ang=Math.atan2(b[1]-a[1],b[0]-a[0]),dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy),n=[dy/L,-dx/L];
+  const c=[a[0]+dx*f+n[0]*off,a[1]+dy*f+n[1]*off], col=MC[m][1], s=0.75+0.45*v;
+  return `<g transform="translate(${c}) rotate(${D(ang)}) scale(${s})"><ellipse rx="${rx*1.5}" ry="${ry*1.7}" fill="${col}" opacity="${0.12+0.5*v*v}" filter="url(#glow)"/><ellipse rx="${rx}" ry="${ry}" fill="url(#mg_${m})" opacity="${0.25+0.75*v}"/></g>`; }
+const st={k:"thrust",t:0.42,p:1,play:false,vec:true};
+function render(){ const tp=T[st.k], g=tp.geo(st.t,st.p), gw=tp.geo(st.t,1), L=tp.load(gw), keys=Object.keys(L), sum=keys.reduce((a,k)=>a+L[k],0), mx=Math.max(...keys.map(k=>L[k]));
+  let h=`<defs><linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9D2E2"/><stop offset=".55" stop-color="#8E99AE"/><stop offset="1" stop-color="#5D677B"/></linearGradient>
+  <radialGradient id="headg" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#E3E9F3"/><stop offset="1" stop-color="#6B7589"/></radialGradient>
+  <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="7"/></filter>
+  <filter id="sh" x="-20%" y="-20%" width="140%" height="160%"><feGaussianBlur stdDeviation="4"/></filter>
+  ${Object.keys(MC).map(m=>`<radialGradient id="mg_${m}" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".35" stop-color="${MC[m][1]}"/><stop offset="1" stop-color="${MC[m][1]}" stop-opacity=".55"/></radialGradient>`).join("")}
+  <style>.bd{fill:url(#skin);stroke:#2B3140;stroke-width:1.4}.bd2{fill:#5E687C;stroke:#2B3140;stroke-width:1.2;opacity:.85}</style></defs>`;
+  if(!tp.noGround){ h+=`<rect x="0" y="${GROUND}" width="400" height="40" fill="#0B0D11"/><line x1="0" y1="${GROUND}" x2="400" y2="${GROUND}" stroke="#3A4252" stroke-width="1.5"/>`;
+  for(let x=0;x<400;x+=12) h+=`<line x1="${x}" y1="${GROUND+1}" x2="${x-6}" y2="${GROUND+8}" stroke="#262C38"/>`; }
+  if(tp.draw){ h+=tp.draw(g,L,mx); }
+  else if(tp.front){ h+=frontBody(tp,g,L,mx); }
+  else {
+  if(tp.equip) h+=tp.equip(g);
+  h+=`<ellipse cx="${(g.A[0]+g.H[0])/2}" cy="${GROUND+2}" rx="70" ry="6" fill="#000" opacity=".45" filter="url(#sh)"/>`;
+  if((tp.bar&&st.k!=="rdl")||tp.plate==="back") h+=`<circle cx="${g.bar[0]}" cy="${g.bar[1]}" r="${g.barR}" fill="#1C2029" stroke="#4A5366" stroke-width="3"/><circle cx="${g.bar[0]}" cy="${g.bar[1]}" r="${g.barR-9}" fill="none" stroke="#2E3543" stroke-width="2"/>`;
+  // back leg (lunge)
+  if(g.Kb){ h+=seg(g.H,g.Kb,14,10,"bd2")+seg(g.Kb,g.Ab,9,6,"bd2"); }
+  // far arm
+  if(tp.arms==="db"){ h+=seg(g.S,g.E,7,6,"bd2"); }
+  // leg
+  h+=seg(g.A,g.toe,7,5)+seg(g.K,g.A,11,7)+seg(g.H,g.K,17,11);
+  // torso
+  h+=seg(g.H,g.S,17,19)+`<circle cx="${g.head[0]}" cy="${g.head[1]}" r="15" fill="url(#headg)" stroke="#2B3140" stroke-width="1.4"/>`;
+  // muscles
+  h+=tp.muscles.map(mu=>muscleAt(g,mu,L[mu[0]]/mx)).join("");
+  // arm
+  h+=seg(g.S,g.E,8,6.5)+seg(g.E,g.Hd,6.5,5.5)+`<circle cx="${g.Hd[0]}" cy="${g.Hd[1]}" r="5.5" fill="url(#skin)" stroke="#2B3140"/>`;
+  if(st.k==="rdl"||tp.plate==="front") h+=`<circle cx="${g.bar[0]}" cy="${g.bar[1]}" r="${g.barR}" fill="#1C202980" stroke="#4A5366" stroke-width="3"/>`;
+  if(tp.arms==="db") h+=`<rect x="${g.Hd[0]-14}" y="${g.Hd[1]-4}" width="28" height="9" rx="4" fill="#4A5366"/>`;
+  // joints
+  if(!tp.noJoints) [g.H,g.K].forEach(j=>h+=`<circle cx="${j[0]}" cy="${j[1]}" r="4.5" fill="#fff" stroke="#11141A" stroke-width="1.5"/>`);
+  }
+  if(st.vec) h+=vecLayer(tp,g);
+  // handle
+  const hj=g[tp.handle]; h+=`<g id="hdl" transform="translate(${hj[0]},${tp.handle==="A"||tp.handle==="Ab"?GROUND+22:hj[1]})"><circle r="15" fill="#FF6A2B"/><path d="M-8,0 h16 M-8,0 l4,-4 M-8,0 l4,4 M8,0 l-4,-4 M8,0 l-4,4" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/></g>`;
+  if(tp.handle==="A"||tp.handle==="Ab") h+=`<line x1="${hj[0]}" y1="${hj[1]}" x2="${hj[0]}" y2="${GROUND+8}" stroke="#FF6A2B" stroke-width="3"/>`;
+  h=h.replace('</defs>','</defs>'+(tp.pv==='screen'?planeLayer(tp):''))+(tp.pv!=='screen'?planeLayer(tp):'');
+  document.getElementById("svg").innerHTML=h;
+  document.getElementById("badge").innerHTML=tp.lv(st.t).replace(/(\d+)/,"<b>$1</b>");
+  document.getElementById("l0").textContent=tp.l0; document.getElementById("l1").textContent=tp.l1; document.getElementById("lv").textContent="";
+  const [c,txt]=tp.tip(gw), tip=document.getElementById("tip"); tip.className="tip "+c; tip.textContent=txt;
+  document.getElementById("bars").innerHTML=keys.sort((a,b)=>L[b]-L[a]).map(k=>`<div class="bar"><b style="color:${MC[k][1]}">${MC[k][0]}</b><i><u style="width:${Math.round(L[k]/sum*100*1.6)}%;background:${MC[k][1]}"></u></i><span>${Math.round(L[k]/sum*100)}%</span></div>`).join("");
+  document.getElementById("vecp").innerHTML=st.vec?vecPanel(st.k,gw):""; document.getElementById("vtog").setAttribute("aria-pressed",st.vec);
+  document.getElementById("title").textContent=tp.name; document.getElementById("mv").textContent="Рух: "+tp.mv; document.getElementById("rng").value=Math.round(st.t*1000);
+  document.querySelectorAll(".pill").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===st.k));
+}
+function pills(){ const gp=st.plf?null:T[st.k].grp, pk=T[st.k].pl;
+  document.getElementById("planes").innerHTML=Object.keys(PL).map(k=>`<button class="pl" data-p="${k}" style="--pc:${PL[k].c}" aria-pressed="${k===pk}">${plIcon(k)}${PL[k].n}</button>`).join("");
+  const pd=document.getElementById("pldesc"); pd.style.setProperty("--pc",PL[pk].c); pd.innerHTML="<b>"+PL[pk].n+" площина</b> "+PL[pk].d;
+  document.getElementById("grp").innerHTML=GRP.map(([k,n])=>`<button data-g="${k}" aria-pressed="${k===gp}">${n}</button>`).join("");
+  document.getElementById("pills").innerHTML=Object.keys(T).filter(k=>st.plf?T[k].pl===st.plf:T[k].grp===gp).map(k=>`<button class="pill" data-k="${k}" aria-pressed="${k===st.k}">${T[k].name}</button>`).join(""); }
+document.getElementById("planes").onclick=e=>{ const b=e.target.closest("[data-p]"); if(!b) return; st.plf=b.dataset.p; if(T[st.k].pl!==st.plf) st.k=Object.keys(T).find(k=>T[k].pl===st.plf); st.t=0.5; pills(); render(); };
+document.getElementById("grp").onclick=e=>{ const b=e.target.closest("[data-g]"); if(!b) return; st.plf=null; st.k=Object.keys(T).find(k=>T[k].grp===b.dataset.g); st.t=0.5; pills(); render(); };
+document.getElementById("pills").onclick=e=>{ const b=e.target.closest(".pill"); if(!b) return; st.k=b.dataset.k; st.t=0.5; pills(); render(); };
+pills();
+document.getElementById("vtog").onclick=e=>{ e.stopPropagation(); st.vec=!st.vec; render(); };
+document.getElementById("vtog").onpointerdown=e=>e.stopPropagation();
+document.getElementById("rng").oninput=e=>{ st.t=e.target.value/1000; render(); };
+// swipe on the stage: horizontal drag changes parameter
+const stage=document.getElementById("stage"); let drag=null;
+stage.addEventListener("pointerdown",e=>{ drag={x:e.clientX,t:st.t}; stage.setPointerCapture(e.pointerId); });
+stage.addEventListener("pointermove",e=>{ if(!drag) return; const w=stage.clientWidth; st.t=cl(drag.t+(e.clientX-drag.x)/(w*0.55),0,1); render(); });
+stage.addEventListener("pointerup",()=>drag=null);
+// rep animation
+let raf=0; document.getElementById("play").onclick=()=>{ st.play=!st.play; document.getElementById("play").textContent=st.play?"⏸ Зупинити":"▶ Показати рух";
+  if(st.play){ const t0=performance.now(); const f=now=>{ if(!st.play){ st.p=1; render(); return; } st.p=0.5-0.5*Math.cos((now-t0)/1000*Math.PI*0.9); render(); raf=requestAnimationFrame(f); }; raf=requestAnimationFrame(f); } };
+render();
+
+/* ================= VIDEO ANALYSIS ================= */
+const N=(p)=>({x:p.x,y:p.y});
+const ang3p=(a,b,c)=>ang3([a.x,a.y],[b.x,b.y],[c.x,c.y]);
+const vang=(a,b)=>D(Math.atan2(b.x-a.x,a.y-b.y)); // angle of a->b from vertical-up, + to the right
+const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+const AN={
+ squat:{view:"збоку",pts:[["S","Плече (гриф)"],["H","Таз"],["K","Коліно"],["A","Щиколотка"]],links:[["S","H"],["H","K"],["K","A"]],face:p=>Math.sign(p.K.x-p.A.x)||1,scale:["H","K",0.245],
+  m(p){ const lean=Math.abs(vang(p.H,p.S)), knee=ang3p(p.H,p.K,p.A), deep=p.H.y>=p.K.y-0.04*dist(p.H,p.K);
+    return {g:{K:[p.K.x,p.K.y],H:[p.H.x,p.H.y],mid:p.S.x,lean},met:[["Нахил корпусу",Math.round(lean)+"°"],["Кут у коліні",Math.round(knee)+"°"],["Глибина",deep?"паралель або нижче ✓":"вище паралелі"]],
+      extra:deep?[]:[["warn","Неповна глибина — стегно не дійшло до паралелі. Сідниці й квадрицепс недоотримують навантаження."]]}; },
+  vec:{P:"S",d:"down",f:"Вага штанги",j:["K","H"]}},
+ thrust:{view:"збоку",pts:[["S","Плече (на лаві)"],["H","Таз"],["K","Коліно"],["A","Щиколотка"]],links:[["S","H"],["H","K"],["K","A"]],face:p=>Math.sign(p.A.x-p.S.x)||1,scale:["H","K",0.245],
+  m(p){ const knee=ang3p(p.H,p.K,p.A), ext=ang3p(p.S,p.H,p.K);
+    return {g:{knee},met:[["Кут у колінах",Math.round(knee)+"°"],["Розгинання стегна",Math.round(ext)+"°"]],extra:ext<165?[["warn","Таз не доходить до повного розгинання (корпус і стегно не в одну лінію). Затримайтеся вгорі й дотисніть сідницями."]]:[]}; },
+  vec:{P:"A",d:"up",f:"Реакція опори",j:["K","H"]}},
+ rdl:{view:"збоку",pts:[["S","Плече"],["H","Таз"],["K","Коліно"],["A","Щиколотка"],["Hd","Гриф"]],links:[["S","H"],["H","K"],["K","A"],["S","Hd"]],face:p=>Math.sign(p.Hd.x-p.H.x)||1,scale:["H","K",0.245],
+  m(p,cm){ const kb=180-ang3p(p.H,p.K,p.A), off=Math.round(Math.abs(p.Hd.x-p.A.x)*cm), back=90-Math.abs(vang(p.H,p.S));
+    return {g:{kb},met:[["Згин у колінах",Math.round(kb)+"°"],["Гриф від щиколотки",off+" см"],["Корпус до горизонталі",Math.round(Math.abs(back))+"°"]],extra:off>12?[["warn","Гриф далеко від ніг — плече сили для попереку росте. Ведіть гриф ближче до стегон і гомілок."]]:[]}; },
+  vec:{P:"Hd",d:"down",f:"Вага штанги",j:["H","K"]}},
+ lunge:{view:"збоку",pts:[["S","Плече"],["H","Таз"],["K","Переднє коліно"],["A","Передня щиколотка"]],links:[["S","H"],["H","K"],["K","A"]],face:p=>Math.sign(p.A.x-p.H.x)||1,scale:["H","K",0.245],
+  m(p){ const shin=vang(p.A,p.K), lean=Math.abs(vang(p.H,p.S)); return {g:{shin},met:[["Нахил гомілки",Math.round(shin)+"°"],["Нахил корпусу",Math.round(lean)+"°"]],extra:[]}; },
+  vec:{P:"S",d:"down",f:"Вага тіла й гантелей",j:["K","H"]}},
+ press:{view:"збоку",pts:[["H","Таз"],["S","Плече"],["E","Лікоть"],["Hd","Гриф"]],links:[["H","S"],["S","E"],["E","Hd"]],face:p=>Math.sign(p.H.x-p.S.x)||1,scale:["S","H",0.29],
+  m(p){ const a=D(Math.atan2(p.H.y-p.S.y,Math.abs(p.H.x-p.S.x))); return {g:{ang:Math.max(0,a)},met:[["Кут корпусу (лави)",Math.round(Math.max(0,a))+"°"],["Кут у лікті",Math.round(ang3p(p.S,p.E,p.Hd))+"°"]],extra:[]}; },
+  vec:{P:"Hd",d:"down",f:"Вага штанги",j:["S","E"]}},
+ row:{view:"збоку",pts:[["H","Таз"],["S","Плече"],["E","Лікоть"],["Hd","Кисть / гриф"]],links:[["H","S"],["S","E"],["E","Hd"]],face:p=>Math.sign(p.S.x-p.H.x)||1,scale:["S","H",0.29],
+  m(p){ const v={x:p.S.x-p.H.x,y:p.S.y-p.H.y}, L=Math.hypot(v.x,v.y), f=((p.Hd.x-p.H.x)*v.x+(p.Hd.y-p.H.y)*v.y)/(L*L), t=cl((f-0.22)/0.58,0,1), tor=Math.abs(D(Math.atan2(p.H.y-p.S.y,Math.abs(p.S.x-p.H.x))));
+    return {g:{t},met:[["Тяга до",t<.35?"пояса":t<.65?"низу грудей":"грудей"],["Корпус до горизонталі",Math.round(tor)+"°"]],extra:tor>55?[["warn","Корпус занадто вертикально — тяга перетворюється на шраги. Нахиліться до 30–45°."]]:[]}; },
+  vec:{P:"Hd",d:"down",f:"Вага штанги",j:["S","E","H"]}},
+ curl:{view:"збоку",pts:[["H","Таз"],["S","Плече"],["E","Лікоть"],["Hd","Кисть"]],links:[["H","S"],["S","E"],["E","Hd"]],face:p=>Math.sign(p.Hd.x-p.E.x)||1,scale:["S","E",0.186],
+  m(p){ const t=vang(p.S,p.H), u=vang(p.S,p.E); let b=u-t; if(b>180)b-=360; if(b<-180)b+=360; b=-b; return {g:{b:cl(b,-60,90)},met:[["Лікоть відносно корпусу",(b<0?"позаду ":"попереду ")+Math.abs(Math.round(b))+"°"],["Кут у лікті",Math.round(ang3p(p.S,p.E,p.Hd))+"°"]],extra:Math.abs(b)>25&&b>0?[["warn","Лікоть сильно виходить уперед під час підйому — підключаються передні дельти, біцепс розвантажується в кінці руху."]]:[]}; },
+  vec:{P:"Hd",d:"down",f:"Вага гантелі",j:["E","S"]}},
+ triext:{view:"збоку",pts:[["H","Таз"],["S","Плече"],["E","Лікоть"],["Hd","Кисть"]],links:[["H","S"],["S","E"],["E","Hd"]],face:p=>1,scale:["S","E",0.186],
+  m(p){ const gm=ang3p(p.H,p.S,p.E); return {g:{gm},met:[["Плече піднято на",Math.round(gm)+"°"],["Кут у лікті",Math.round(ang3p(p.S,p.E,p.Hd))+"°"]],extra:[]}; },
+  vec:{P:"Hd",d:"down",f:"Вага",j:["E","S"]}},
+ lat:{view:"спереду",pts:[["H","Таз (цей бік)"],["S","Плече"],["Hd","Кисть"]],links:[["H","S"],["S","Hd"]],face:p=>1,scale:["S","Hd",0.33],
+  m(p){ const am=ang3p(p.H,p.S,p.Hd); return {g:{am},met:[["Підйом руки",Math.round(am)+"°"]],extra:[]}; },
+  vec:{P:"Hd",d:"down",f:"Вага гантелі",j:["S"]}},
+ benchgrip:{view:"з боку ніг або згори",pts:[["Sl","Ліве плече"],["Sr","Праве плече"],["Hl","Ліва кисть"],["Hr","Права кисть"]],links:[["Sl","Sr"],["Sl","Hl"],["Sr","Hr"],["Hl","Hr"]],face:p=>1,scale:["Sl","Sr",0.2],
+  m(p){ const r=dist(p.Hl,p.Hr)/Math.max(1,dist(p.Sl,p.Sr)); return {g:{hw:52*r},met:[["Ширина хвату",(Math.round(r*10)/10+"").replace(".",",")+" ширини плечей"]],extra:[]}; },
+  vec:{P:"Hr",d:"down",f:"Вага штанги",j:["Sr"]}},
+ pulldown:{view:"спереду або ззаду",pts:[["Sl","Ліве плече"],["Sr","Праве плече"],["Hl","Ліва кисть"],["Hr","Права кисть"]],links:[["Sl","Sr"],["Sl","Hl"],["Sr","Hr"],["Hl","Hr"]],face:p=>1,scale:["Sl","Sr",0.2],
+  m(p){ const r=dist(p.Hl,p.Hr)/Math.max(1,dist(p.Sl,p.Sr)); return {g:{hw:50*r},met:[["Ширина хвату",(Math.round(r*10)/10+"").replace(".",",")+" ширини плечей"]],extra:[]}; },
+  vec:{P:"Hr",d:"up",f:"Тяга блока",j:["Sr"]}},
+ fly:{view:"спереду",pts:[["S","Плече"],["Hd","Кисть"],["P","Блок (ролик)"]],links:[["S","Hd"],["Hd","P"]],face:p=>1,scale:["S","Hd",0.33],
+  m(p){ const dy=(p.P.y-p.S.y)/Math.max(1,dist(p.S,p.Hd)), t=cl(0.5+dy*0.6,0,1); return {g:{t},met:[["Блок відносно плеча",dy<-0.3?"вище":dy>0.3?"нижче":"на рівні"]],extra:[]}; },
+  vec:{P:"Hd",d:"P",f:"Тяга троса",j:["S"]}},
+ hip:{view:"спереду",pts:[["Ho","Таз (опорна нога)"],["H","Таз (робоча нога)"],["F","Щиколотка робочої ноги"]],links:[["Ho","H"],["H","F"]],face:p=>1,scale:["H","F",0.49],
+  m(p){ const side=Math.sign(p.H.x-p.Ho.x)||1, a=vang({x:p.H.x,y:p.H.y},{x:p.F.x,y:p.F.y}); const out=-(180-Math.abs(a))*Math.sign(a)*side; // + outward
+    const am=Math.round(Math.abs(out)<1?0:out); const t=am>=0?cl(0.5+am/90,0,1):cl(0.5+am/50,0,1); return {g:{t},met:[[am>=0?"Відведення":"Приведення",Math.abs(am)+"°"]],extra:[]}; },
+  vec:{P:"F",d:"down",f:"Вага / опір",j:["H"]}}
+};
+const AJ={H:["Кульшовий суглоб","#FF4D9A"],K:["Коліно","#3DDC84"],S:["Плече","#FF8A3D"],E:["Лікоть","#38C6F4"],Sr:["Плече","#FF8A3D"]};
+const an={k:"squat",who:"self",pts:{},cur:0,url:null,h:170,cmt:""};
+function anPills(){ const gp=T[an.k].grp; document.getElementById("angrp").innerHTML=GRP.filter(([k])=>Object.keys(AN).some(x=>T[x].grp===k)).map(([k,n])=>`<button data-g="${k}" aria-pressed="${k===gp}">${n}</button>`).join("");
+  document.getElementById("anpills").innerHTML=Object.keys(AN).filter(k=>T[k].grp===gp).map(k=>`<button class="pill" data-k="${k}" aria-pressed="${k===an.k}">${T[k].name}</button>`).join(""); }
+function anCalc(){ const A=AN[an.k], P=an.pts; if(!A.pts.every(([n])=>P[n])) return null;
+  const f=A.face(P)<0?-1:1, q={}; for(const n in P) q[n]={x:P[n].x*f,y:P[n].y};
+  const sc=A.scale, segpx=dist(q[sc[0]],q[sc[1]]), cm=(an.h*sc[2])/Math.max(1,segpx);
+  const r=A.m(q,cm), tp=T[an.k], L=tp.load(r.g), tip=tp.tip(r.g);
+  const v=A.vec, Pp=P[v.P], d=v.d==="down"?[0,1]:v.d==="up"?[0,-1]:unit([Pp.x,Pp.y],[P[v.d].x,P[v.d].y]);
+  const arms=v.j.map(n=>{ const J=P[n]; const rr=[J.x-Pp.x,J.y-Pp.y], t=rr[0]*d[0]+rr[1]*d[1], F=[Pp.x+d[0]*t,Pp.y+d[1]*t], a=Math.abs(rr[0]*d[1]-rr[1]*d[0]); return {n,J:[J.x,J.y],F,a,cm:Math.round(a*cm)}; });
+  return {r,L,tip,arms,d,P:[Pp.x,Pp.y],f:v.f,cm}; }
+function anOverlay(){ const svg=document.getElementById("anov"); if(!svg) return; const vw=svg.viewBox.baseVal.width||1000, k=vw/400, A=AN[an.k], P=an.pts, c=anCalc(); let h="";
+  if(c){ const {P:pp,d}=c; h+=`<line x1="${pp[0]-d[0]*5000}" y1="${pp[1]-d[1]*5000}" x2="${pp[0]+d[0]*5000}" y2="${pp[1]+d[1]*5000}" stroke="#fff" stroke-width="${2*k}" stroke-dasharray="${8*k} ${8*k}" opacity=".8"/>`;
+    c.arms.forEach(m=>{ const col=(AJ[m.n]||["","#fff"])[1]; if(m.a<3*k) return; h+=`<line x1="${m.J[0]}" y1="${m.J[1]}" x2="${m.F[0]}" y2="${m.F[1]}" stroke="${col}" stroke-width="${5*k}" stroke-linecap="round"/>`;
+      const mx=(m.J[0]+m.F[0])/2,my=(m.J[1]+m.F[1])/2-12*k; h+=`<g transform="translate(${mx},${my}) scale(${k})"><rect x="-22" y="-10" width="44" height="19" rx="9" fill="#000c" stroke="${col}"/><text y="4.5" fill="#fff" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">${m.cm} см</text></g>`; });
+    const e=[pp[0]+d[0]*80*k,pp[1]+d[1]*80*k], n=[-d[1],d[0]]; h+=`<line x1="${pp[0]}" y1="${pp[1]}" x2="${e[0]-d[0]*10*k}" y2="${e[1]-d[1]*10*k}" stroke="#4EA1FF" stroke-width="${7*k}" stroke-linecap="round"/><path d="M${e[0]},${e[1]} L${e[0]-d[0]*20*k+n[0]*11*k},${e[1]-d[1]*20*k+n[1]*11*k} L${e[0]-d[0]*20*k-n[0]*11*k},${e[1]-d[1]*20*k-n[1]*11*k} Z" fill="#4EA1FF"/>`; }
+  A.links.forEach(([a,b])=>{ if(P[a]&&P[b]) h+=`<line x1="${P[a].x}" y1="${P[a].y}" x2="${P[b].x}" y2="${P[b].y}" stroke="#ffffffdd" stroke-width="${4*k}" stroke-linecap="round"/>`; });
+  A.pts.forEach(([n,lab],i)=>{ const q=P[n]; if(!q) return; const col=(AJ[n]||["","#FFB020"])[1]; h+=`<g class="pt" data-n="${n}"><circle cx="${q.x}" cy="${q.y}" r="${16*k}" fill="transparent"/><circle cx="${q.x}" cy="${q.y}" r="${8*k}" fill="${col}" stroke="#fff" stroke-width="${2.5*k}"/><text x="${q.x+12*k}" y="${q.y-10*k}" fill="#fff" font-size="${13*k}" font-weight="700" font-family="sans-serif" paint-order="stroke" stroke="#000" stroke-width="${3*k}">${lab}</text></g>`; });
+  svg.innerHTML=h; }
+function anStage(){ const el=document.getElementById("anstage"), A=AN[an.k];
+  if(!an.url){ el.innerHTML=`<label class="drop"><span style="font-size:34px">📹</span><b>Завантажте відео або фото</b><span>Знімайте ${A.view}, щоб у кадрі було все тіло. Камера на рівні таза, нерухомо.</span><input type="file" id="anfile" accept="video/*,image/*" hidden><span class="btn p" style="flex:none;padding:10px 16px">Обрати файл</span></label>`;
+    document.getElementById("anfile").onchange=anLoad; document.getElementById("anres").innerHTML=""; return; }
+  const cur=A.pts[an.cur];
+  el.innerHTML=`<div class="vbox" id="vbox">${an.img?`<img id="anmedia" src="${an.url}" style="display:block;width:100%">`:`<video id="anmedia" src="${an.url}" playsinline muted preload="auto"></video>`}<svg id="anov"></svg></div>`+
+    (an.img?"":`<div class="scrub"><button id="anb" aria-label="Кадр назад">◀</button><input type="range" id="ant" min="0" max="1000" value="0" aria-label="Кадр"><button id="anf" aria-label="Кадр вперед">▶</button><span class="tcode" id="antc">0,0 с</span></div>`)+
+    `<div class="ptchips">${A.pts.map(([n,l],i)=>`<span class="ptc ${an.pts[n]?"done":i===an.cur?"cur":""}">${an.pts[n]?"✓ ":""}${l}</span>`).join("")}</div>`+
+    (cur&&!an.pts[cur[0]]?`<div class="prompt">👆 Зупиніть відео в найважчій точці руху й торкніться: <b>${cur[1]}</b></div>`:`<div class="prompt" style="background:#3DDC841a;border-color:#3DDC8466">✓ Точки поставлено. Перетягуйте їх, щоб уточнити. <button class="link" id="anreset" style="background:none;border:0;color:#9CC8FF;font:600 14px inherit;padding:0">Скинути точки</button></div>`)+
+    `<div class="hrow" style="margin-top:6px"><span class="flabel" style="margin:0">Зріст${an.who==="coach"?" клієнта":""}, см</span><input class="field" id="anh" inputmode="numeric" value="${an.h}"><button class="btn" id="anclr" style="flex:none;padding:10px 12px">Інше відео</button></div>`;
+  const m=document.getElementById("anmedia"), svg=document.getElementById("anov");
+  const setVB=()=>{ const w=m.videoWidth||m.naturalWidth||1000, hh=m.videoHeight||m.naturalHeight||1000; svg.setAttribute("viewBox",`0 0 ${w} ${hh}`); anOverlay(); };
+  if(an.img){ if(m.complete) setVB(); else m.onload=setVB; } else { m.onloadedmetadata=()=>{ setVB(); seek(an.time||0); }; const r=document.getElementById("ant");
+    const seek=t=>{ m.currentTime=cl(t,0,m.duration||0); an.time=m.currentTime; r.value=Math.round(m.currentTime/(m.duration||1)*1000); document.getElementById("antc").textContent=(Math.round(m.currentTime*10)/10+" с").replace(".",","); };
+    r.oninput=()=>seek(r.value/1000*(m.duration||0)); document.getElementById("anb").onclick=()=>seek(m.currentTime-1/30); document.getElementById("anf").onclick=()=>seek(m.currentTime+1/30); }
+  const toV=e=>{ const b=svg.getBoundingClientRect(), vb=svg.viewBox.baseVal; return {x:(e.clientX-b.left)/b.width*vb.width,y:(e.clientY-b.top)/b.height*vb.height}; };
+  let drag=null;
+  svg.onpointerdown=e=>{ e.preventDefault(); const pt=e.target.closest(".pt"); if(pt){ drag=pt.dataset.n; svg.setPointerCapture(e.pointerId); return; }
+    const c=A.pts[an.cur]; if(c&&!an.pts[c[0]]){ an.pts[c[0]]=toV(e); an.cur++; anStage(); anResults(); } };
+  svg.onpointermove=e=>{ if(!drag) return; an.pts[drag]=toV(e); anOverlay(); anResults(); };
+  svg.onpointerup=()=>{ if(drag){ drag=null; anStage(); } };
+  const rs=document.getElementById("anreset"); if(rs) rs.onclick=()=>{ an.pts={}; an.cur=0; anStage(); anResults(); };
+  document.getElementById("anh").oninput=e=>{ an.h=cl(+e.target.value||170,120,220); anOverlay(); anResults(); };
+  document.getElementById("anclr").onclick=()=>{ an.url=null; an.pts={}; an.cur=0; anStage(); };
+}
+function anLoad(e){ const f=e.target.files&&e.target.files[0]; if(!f) return; an.url=URL.createObjectURL(f); an.img=/^image/.test(f.type); an.pts={}; an.cur=0; an.time=0; anStage(); anResults(); }
+function anResults(){ const el=document.getElementById("anres"), c=anCalc(); if(!c){ el.innerHTML=an.url?`<p class="note">Поставте всі точки — і тут з’явиться розбір.</p>`:""; return; }
+  const keys=Object.keys(c.L), sum=keys.reduce((a,k)=>a+c.L[k],0), mxa=Math.max(1,...c.arms.map(m=>m.a)), tips=[c.tip,...c.r.extra];
+  el.innerHTML=`<div class="metrics">${c.r.met.map(([n,v])=>`<div class="metric"><small>${n}</small><b>${v}</b></div>`).join("")}</div>`+
+    tips.map(([cls,t])=>`<div class="tip ${cls}">${cls==="warn"?"⚠️ ":""}${t}</div>`).join("")+
+    `<div class="bars">${keys.sort((a,b)=>c.L[b]-c.L[a]).map(k=>`<div class="bar"><b style="color:${MC[k][1]}">${MC[k][0]}</b><i><u style="width:${Math.round(c.L[k]/sum*160)}%;background:${MC[k][1]}"></u></i><span>${Math.round(c.L[k]/sum*100)}%</span></div>`).join("")}</div>`+
+    `<div class="bars vecp"><div class="vh">↘ <b>Вектор навантаження:</b> ${c.f}. Плечі сили виміряно на кадрі (масштаб за зростом ${an.h} см).</div>${c.arms.map(m=>`<div class="bar"><b style="color:${(AJ[m.n]||["","#fff"])[1]}">${(AJ[m.n]||[m.n])[0]}</b><i><u style="width:${Math.round(m.a/mxa*100)}%;background:${(AJ[m.n]||["","#fff"])[1]}"></u></i><span>${m.cm} см</span></div>`).join("")}</div>`+
+    `<span class="flabel">${an.who==="coach"?"Коментар тренера клієнту":"Питання або коментар для тренера"}</span><textarea class="field" id="ancmt" rows="3" maxlength="300" placeholder="${an.who==="coach"?"Наприклад: тримай груди вище, коліна по лінії стоп":"Наприклад: відчуваю поперек, а не сідниці"}">${an.cmt}</textarea>`+
+    `<div class="row"><button class="btn" id="ansave">🖼 Зберегти картинку</button><button class="btn p" id="ansend">📤 ${an.who==="coach"?"Надіслати клієнту":"Надіслати тренеру"}</button></div>`+
+    `<p class="note">Розбір спирається на ту саму модель, що й симулятор: кути суглобів → розподіл навантаження, лінія дії сили → плечі сил. Це орієнтир для тренера, а не медичний висновок.</p>`;
+  document.getElementById("ancmt").oninput=e=>an.cmt=e.target.value;
+  document.getElementById("ansave").onclick=()=>anSnap(true); document.getElementById("ansend").onclick=()=>anSnap(false); }
+async function anSnap(dl){ const m=document.getElementById("anmedia"), svg=document.getElementById("anov"); const w=m.videoWidth||m.naturalWidth, h=m.videoHeight||m.naturalHeight;
+  const sc=Math.min(1,720/Math.max(w,h)), cv=document.createElement("canvas"); cv.width=Math.round(w*sc); cv.height=Math.round(h*sc); const x=cv.getContext("2d"); x.drawImage(m,0,0,cv.width,cv.height);
+  const im=new Image(); const xml=new XMLSerializer().serializeToString(svg).replace("<svg",`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}"`);
+  im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(xml); await new Promise(r=>{ im.onload=r; im.onerror=r; }); x.drawImage(im,0,0,cv.width,cv.height);
+  const c=anCalc(); const txt=`Розбір техніки · ${T[an.k].name}\n`+c.r.met.map(([n,v])=>n+": "+v).join("\n")+"\n"+[c.tip,...c.r.extra].map(t=>(t[0]==="warn"?"⚠️ ":"✓ ")+t[1]).join("\n")+(an.cmt?"\n💬 "+an.cmt:"");
+  cv.toBlob(async b=>{ const file=new File([b],"rozbir.jpg",{type:"image/jpeg"});
+    if(!dl&&navigator.canShare&&navigator.canShare({files:[file]})){ try{ await navigator.share({files:[file],text:txt}); return; }catch(_){ } }
+    const a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="rozbir.jpg"; a.click(); toast(dl?"Картинку збережено":"У боті тут відкриється вибір чату — розбір піде посиланням"); },"image/jpeg",0.85); }
+function toast(t){ const d=document.createElement("div"); d.className="toast"; d.textContent=t; document.body.appendChild(d); setTimeout(()=>d.remove(),2600); }
+document.getElementById("modes").onclick=e=>{ const b=e.target.closest("[data-m]"); if(!b) return; const an_=b.dataset.m==="an"; document.getElementById("simv").hidden=an_; document.getElementById("anv").hidden=!an_;
+  document.querySelectorAll("#modes button").forEach(x=>x.setAttribute("aria-pressed",x===b)); if(an_){ if(AN[st.k]) an.k=st.k; anPills(); anStage(); anResults(); } };
+document.getElementById("anwho").onclick=e=>{ const b=e.target.closest("[data-w]"); if(!b) return; an.who=b.dataset.w; document.querySelectorAll("#anwho button").forEach(x=>x.setAttribute("aria-pressed",x===b)); anStage(); anResults(); };
+document.getElementById("angrp").onclick=e=>{ const b=e.target.closest("[data-g]"); if(!b) return; an.k=Object.keys(AN).find(k=>T[k].grp===b.dataset.g); an.pts={}; an.cur=0; anPills(); anStage(); anResults(); };
+document.getElementById("anpills").onclick=e=>{ const b=e.target.closest(".pill"); if(!b) return; an.k=b.dataset.k; an.pts={}; an.cur=0; anPills(); anStage(); anResults(); };
+window.__an=an; window.__anStage=anStage; window.__anResults=anResults;
+</script></body></html>
