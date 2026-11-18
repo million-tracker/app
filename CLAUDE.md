@@ -2,7 +2,7 @@
 
 ## Version stamp (always update)
 The app shows a version label in Settings: `Million · версия DD.MM · HH:MM`.
-It is a hardcoded constant in `index.html`, currently `const Hi="18.11 · 17:04"`
+It is a hardcoded constant in `index.html`, currently `const Hi="18.11 · 18:20"`
 (the variable name may change after a rebuild — search for `a("версия")` to find it).
 
 **On every change pushed to the repository, update this stamp** to the current date
@@ -27,6 +27,14 @@ How to run the app locally (it only starts on its own hostname):
   copy an item of `tb_plans`, set `who:"<name>"` and a date, save, reload.
 - Open screens by creating a button with `data-a="<action>" data-x="<arg>"` and
   clicking it (all clicks go through `document` → `G[data-a](data-x, el)`).
+
+Automated audit (use it, then check the NOCHANGE list by hand):
+`node tools/button-audit.js index.html en out.json 3` — clicks every button on every tab
+and in every sheet it opens; prints ERR (JS error) and NOCHANGE (no visible effect).
+Coach mode: add `tools/seed-coach.js` as 5th argument. Long tabs: split with `TAB=train R=0-12`.
+Expected NOCHANGE (not bugs): already-selected options, rest-timer buttons while no timer
+runs, current tab, "Add" with an empty field (focuses it), external links / Telegram-only
+actions (share, privacy, payment) — they need Telegram.
 
 Checklist for each affected screen or sheet:
 1. List all `[data-a]` inside it and click each one, for every state that changes
