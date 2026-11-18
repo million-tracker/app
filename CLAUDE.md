@@ -2,7 +2,7 @@
 
 ## Version stamp (always update)
 The app shows a version label in Settings: `Million · версия DD.MM · HH:MM`.
-It is a hardcoded constant in `index.html`, currently `const Hi="18.11 · 18:20"`
+It is a hardcoded constant in `index.html`, currently `const Hi="18.11 · 20:08"`
 (the variable name may change after a rebuild — search for `a("версия")` to find it).
 
 **On every change pushed to the repository, update this stamp** to the current date
@@ -14,6 +14,13 @@ The app supports Russian, Ukrainian and English. The biomechanics screen (templa
 string containing `<title>Біомеханіка вправи</title>`, plus its nested 3D pages) is
 written in Ukrainian and translated at runtime through the `__T()` dictionary
 (`__LD.ru` / `__LD.en`). New Ukrainian strings there need ru/en entries added.
+
+## Simulator figures (biomechanics screen)
+Body segments follow anthropometric ratios (Winter / Drillis–Contini). Large side-view figure: torso hip–shoulder 100,
+thigh 96, shin ~94, upper arm `UA=64`, elbow–grip `FA=62` (`AR` = full arm). Small standing figure for arm exercises
+(`SH`, `sideStand`, `frontStand`): torso 69, thigh 60, shin 60, arm 46+42. Use these constants for new templates and
+check bone lengths stay constant over the movement. The view box fits the whole figure automatically (`viewY`).
+Technique cues per exercise: `TECH` (uk/ru/en arrays) next to the templates.
 
 ## Before every push: test every button you touched (mandatory)
 The owner has asked for this explicitly. A change is not done until every button
