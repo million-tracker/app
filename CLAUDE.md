@@ -2,7 +2,7 @@
 
 ## Version stamp (always update)
 The app shows a version label in Settings: `Million · версия DD.MM · HH:MM`.
-It is a hardcoded constant in `index.html`, currently `const Hi="19.11 · 00:09"`
+It is a hardcoded constant in `index.html`, currently `const Hi="19.11 · 00:23"`
 (the variable name may change after a rebuild — search for `a("версия")` to find it).
 
 **On every change pushed to the repository, update this stamp** to the current date
