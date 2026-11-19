@@ -2,7 +2,7 @@
 
 ## Version stamp (always update)
 The app shows a version label in Settings: `Million · версия DD.MM · HH:MM`.
-It is a hardcoded constant in `index.html`, currently `const Hi="20.11 · 00:59"`
+It is a hardcoded constant in `index.html`, currently `const Hi="20.11 · 01:04"`
 (the variable name may change after a rebuild — search for `a("версия")` to find it).
 
 **On every change pushed to the repository, update this stamp** to the current date
@@ -21,6 +21,13 @@ thigh 96, shin ~94, upper arm `UA=64`, elbow–grip `FA=62` (`AR` = full arm). S
 (`SH`, `sideStand`, `frontStand`): torso 69, thigh 60, shin 60, arm 46+42. Use these constants for new templates and
 check bone lengths stay constant over the movement. The view box fits the whole figure automatically (`viewY`).
 Technique cues per exercise: `TECH` (uk/ru/en arrays) next to the templates.
+
+## Screenshots of every change (mandatory)
+The owner asked to see every change on screenshots. After each change, take screenshots
+of every affected screen in Playwright with `devices["iPhone 13"]` (touch on, so the Million
+keyboard and press-and-drag work), in the owner's language (uk) unless asked otherwise, and
+send them to the owner together with the summary — including intermediate states such as
+a drag in progress or an open keyboard.
 
 ## Before every push: test every button you touched (mandatory)
 The owner has asked for this explicitly. A change is not done until every button
