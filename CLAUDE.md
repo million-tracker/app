@@ -2,12 +2,21 @@
 
 ## Version stamp (always update)
 The app shows a version label in Settings: `Million · версия DD.MM · HH:MM`.
-It is a hardcoded constant in `index.html`, currently `const Hi="20.11 · 18:32"`
+It is a hardcoded constant in `index.html`, currently `const Hi="20.11 · 21:45"`
 (the variable name may change after a rebuild — search for `a("версия")` to find it).
 
 **On every change pushed to the repository, update this stamp** to the current date
 and time in Kyiv (Europe/Kiev), format `DD.MM · HH:MM`. The owner uses it to tell
 which version is live.
+
+## Product policy (owner, 20.11)
+Million is (1) a smart, evidence-based navigator for the first workouts — it helps a beginner start safely
+and collect real statistics; it does not replace the person's own judgment or proper technique; and
+(2) a full coach ↔ client ecosystem with gym geolocation and deep analytics.
+Smart analytics and deviation control: the app logs workouts and nutrition, tracks progress, volume and
+calories, and highlights lapses by itself — if someone drops out of the schedule or drifts off their
+calories, it pulls the last week and previous periods and shows exactly where the deviation is.
+Design every feature and hint in this spirit: guide, measure, explain — never overpromise.
 
 ## Languages
 The app supports Russian, Ukrainian and English. The biomechanics screen (template
