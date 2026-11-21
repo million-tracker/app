@@ -118,13 +118,17 @@ def page(L):
 <section class="res" id="res" aria-live="polite"><div class="card"><div class="big" id="o_k">0<small>{d["kcal"]}</small></div>
 <div class="mac"><div><b id="o_p">0</b><span>{d["p"]}, {d["g"]}</span></div><div><b id="o_f">0</b><span>{d["fa"]}, {d["g"]}</span></div><div><b id="o_c">0</b><span>{d["c"]}, {d["g"]}</span></div></div>
 <div class="sub"><span>{d["bmr"]}: <b id="o_b">0</b></span><span>{d["tdee"]}: <b id="o_t">0</b></span></div><p class="note">{d["note"]}</p></div>
-<a class="btn p" id="cta" href="{BOT}" rel="noopener">{d["cta"]}</a><p class="hint" style="text-align:center">{d["ctas"]}</p><a class="btn s" href="{BOT.replace('wkbzh','wprog')}" rel="noopener">{d["cta2"]}</a></section>
+<a class="btn p" id="cta" href="{BOT}" rel="noopener">{d["cta"]}</a><p class="hint" style="text-align:center">{d["ctas"]}</p><a class="btn s" href="{BASE+('prohrama-trenuvan/' if L=='uk' else 'ru/programma-trenirovok/')}">{d["cta2"]}</a></section>
 <h2>{d["how_h"]}</h2><ul class="how">{''.join('<li>'+x+'</li>' for x in d["how"])}</ul>
 <h2>{d["faq_h"]}</h2>{''.join('<details><summary>'+q+'</summary><p>'+a+'</p></details>' for q,a in d["faq"])}
 <footer><a href="{BOT}">{d["foot"]}</a></footer></main>
 <script>window.__D={json.dumps({"err":d["err"]},ensure_ascii=False)};</script><script>{JS}</script></body></html>'''
   return html
-for L in T:
-  p=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..',T[L]["path"]);os.makedirs(p,exist_ok=True);open(p+'index.html','w').write(page(L))
-open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..','sitemap.xml'),'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'+''.join(f'<url><loc>{BASE+T[L]["path"]}</loc><xhtml:link rel="alternate" hreflang="uk" href="{BASE+T["uk"]["path"]}"/><xhtml:link rel="alternate" hreflang="ru" href="{BASE+T["ru"]["path"]}"/><changefreq>monthly</changefreq><priority>0.9</priority></url>\n' for L in T)+'</urlset>\n')
-print('ok')
+PAGES=[("kalkulyator-kbzhv/","ru/kalkulyator-kbzhu/"),("prohrama-trenuvan/","ru/programma-trenirovok/")]
+if __name__=="__main__":
+  R=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..')
+  for L in T:
+    p=os.path.join(R,T[L]["path"]);os.makedirs(p,exist_ok=True);open(os.path.join(p,'index.html'),'w').write(page(L))
+  import gen_prog;gen_prog.main()
+  open(os.path.join(R,'sitemap.xml'),'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'+''.join(f'<url><loc>{BASE+u}</loc><xhtml:link rel="alternate" hreflang="uk" href="{BASE+a}"/><xhtml:link rel="alternate" hreflang="ru" href="{BASE+b}"/><changefreq>monthly</changefreq><priority>0.9</priority></url>\n' for a,b in PAGES for u in (a,b))+'</urlset>\n')
+  print('ok')
