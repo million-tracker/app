@@ -2,7 +2,7 @@
 
 ## Version stamp (always update)
 The app shows a version label in Settings: `Million · версия DD.MM · HH:MM`.
-It is a hardcoded constant in `index.html`, currently `const Hi="21.11 · 22:24"`
+It is a hardcoded constant in `index.html`, currently `const Hi="22.11 · 15:23"`
 (the variable name may change after a rebuild — search for `a("версия")` to find it).
 
 **On every change pushed to the repository, update this stamp** to the current date
@@ -17,6 +17,14 @@ Smart analytics and deviation control: the app logs workouts and nutrition, trac
 calories, and highlights lapses by itself — if someone drops out of the schedule or drifts off their
 calories, it pulls the last week and previous periods and shows exactly where the deviation is.
 Design every feature and hint in this spirit: guide, measure, explain — never overpromise.
+
+## Tip of the day / praise (Telegram)
+The app picks at most one reason a day on the phone (`TipL`: new working weight or more reps at the same
+weight in a workout of the last 36 h, a week of planned workouts with no misses, calories within ±10% on
+5 of 7 days, weight/waist moving toward the goal) and `TipS` sends one ready line to `/api/tip` for 19:00
+local time; with no reason it schedules "N days without a workout" for 3 days after the last workout.
+Repeats: the same kind at most once in 7 days (`tb_tip` in localStorage). Opt-out only in the bot: the button under a tip («🔕» / «🔔 back on») or `/tips`; the server keeps `tipOff`
+(returned by `/api/status`; the app then stops sending lines). Server side: `million-tracker/api` (cron sends).
 
 ## Languages
 The app supports Russian, Ukrainian and English. The biomechanics screen (template
