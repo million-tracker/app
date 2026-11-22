@@ -1,5 +1,5 @@
 # Publishes only the site files to GitHub Pages.
-# Internal files (CLAUDE.md, tools/, .github/, LICENSE) stay in the private repository.
+# Internal files (CLAUDE.md, PROJECT.md, any *.md, tools/, .github/, LICENSE) stay in the private repository.
 name: Publish site
 on:
   push:
@@ -23,11 +23,12 @@ jobs:
       - name: Collect site files
         run: |
           mkdir _site
-          git ls-files | grep -vE '^(\.github/|tools/|CLAUDE\.md$|LICENSE$)|\.md$' | while read -r f; do mkdir -p "_site/$(dirname "$f")"; cp "$f" "_site/$f"; done
+          git ls-files | grep -vE '^(\.github/|tools/|CLAUDE\.md$|PROJECT\.md$|LICENSE$)|\.md$' | while read -r f; do mkdir -p "_site/$(dirname "$f")"; cp "$f" "_site/$f"; done
           touch _site/.nojekyll
           echo "Published files:"; find _site -type f | sort
           test -f _site/index.html
           test ! -e _site/CLAUDE.md
+          test ! -e _site/PROJECT.md
           test ! -e _site/tools
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

@@ -1,8 +1,10 @@
 # Million — notes for Claude
 
+**Before any work, read `PROJECT.md` in the private repository `million-tracker/api`** (project context: state, decisions, open tasks). **At the end of every task, update it there** (a PR in api; a change to `.md` only does not trigger the Worker deploy).
+
 ## Version stamp (always update)
 The app shows a version label in Settings: `Million · версия DD.MM · HH:MM`.
-It is a hardcoded constant in `index.html`, currently `const Hi="22.11 · 15:23"`
+It is a hardcoded constant in `index.html`, currently `const Hi="22.11 · 16:07"`
 (the variable name may change after a rebuild — search for `a("версия")` to find it).
 
 **On every change pushed to the repository, update this stamp** to the current date
