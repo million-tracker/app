@@ -412,7 +412,11 @@ Object.assign(MC,{bicl:[__T("Довга голівка біцепса"),"#3DDC84
 
 /* ---------- figure type ---------- */
 let FEM=true; try{ FEM=localStorage.getItem("tb_biofem")!=="0"; }catch(_){}
-const HAIR="#4A3F37";
+const HAIR="#7B5537";
+/* female figure, illustrated style: warm skin, dark leggings, sports top, light sneakers (5 stops: shade, mid, light, mid, shade) */
+const FP={skin:["#A9765C","#CF9C80","#EDC3A6","#CF9C80","#A9765C"],leg:["#2F2B3A","#4E4860","#6E6788","#4E4860","#2F2B3A"],top:["#33303D","#55506A","#7D7796","#55506A","#33303D"],shoe:["#8D939E","#C4C8D0","#F0F2F5","#C4C8D0","#8D939E"]};
+const fpFar=C=>C.map(c=>mixC(c,"#141821",.22));
+function lg(id,x1,y1,x2,y2,C){ return \`<linearGradient id="\${id}" gradientUnits="userSpaceOnUse" x1="\${x1.toFixed(1)}" y1="\${y1.toFixed(1)}" x2="\${x2.toFixed(1)}" y2="\${y2.toFixed(1)}">\`+C.map((c,i)=>\`<stop offset="\${i/4}" stop-color="\${c}"/>\`).join("")+"</linearGradient>"; }
 function femTorso(H,S,fl,male){ const u=unit(H,S), n=fl?[-u[1],u[0]]:[u[1],-u[0]], L=Math.hypot(S[0]-H[0],S[1]-H[1]);
   /* athletic profile: male — chest and lats wider than a narrow waist; female — glutes, small waist */
   const ks=[0,0.18,0.42,0.62,0.8,1], back=male?[15.5,14,11.5,13,14.5,11]:[13.5,13,8,9,10.5,9.5], front=male?[14,11.5,10,11.5,14.5,11]:[11.5,10,7.5,8,9,9.5];
@@ -423,13 +427,25 @@ function femTorso(H,S,fl,male){ const u=unit(H,S), n=fl?[-u[1],u[0]]:[u[1],-u[0]
   for(let i=N;i>=0;i--){ const t=i/N, p=P(t,-wf(front,t)); d+="L"+p[0].toFixed(1)+","+p[1].toFixed(1); }
   const hb=P(0,wf(back,0)); d+=\`A13 13 0 0 \${sw} \${hb[0].toFixed(1)},\${hb[1].toFixed(1)}Z\`;
   const m=P(.5,0), w=15, id="cy"+(CYG++), q=n[0]*-.57+n[1]*-.82<0?-1:1, nx=n[0]*q, ny=n[1]*q;
+  if(FEM&&!male){ /* skin torso, then leggings (hips) and the sports top clipped to it; the data-tr path goes last so the muscles land on top */
+    const x1=m[0]-nx*w, y1=m[1]-ny*w, x2=m[0]+nx*w, y2=m[1]+ny*w, cid="tc"+(CYG++), il="cy"+(CYG++), it="cy"+(CYG++);
+    const band=(a,b)=>{ const p=[P(a,40),P(b,40),P(b,-40),P(a,-40)]; return "M"+p.map(z=>z[0].toFixed(1)+","+z[1].toFixed(1)).join(" L")+"Z"; };
+    return \`<defs>\${lg(id,x1,y1,x2,y2,FP.skin)}\${lg(il,x1,y1,x2,y2,FP.leg)}\${lg(it,x1,y1,x2,y2,FP.top)}<clipPath id="\${cid}"><path d="\${d}"/></clipPath></defs><path d="\${d}" fill="url(#\${id})"/>\`+
+      \`<g clip-path="url(#\${cid})"><path d="\${band(-.3,.3)}" fill="url(#\${il})"/><path d="\${band(.56,.9)}" fill="url(#\${it})"/></g><circle cx="\${S[0].toFixed(1)}" cy="\${S[1].toFixed(1)}" r="9.5" fill="url(#\${id})"/><path data-tr="\${[H[0],H[1],S[0],S[1],fl?1:0,0].join(",")}" d="\${d}" fill="none"/>\`; }
   return \`<defs><linearGradient id="\${id}" gradientUnits="userSpaceOnUse" x1="\${(m[0]-nx*w).toFixed(1)}" y1="\${(m[1]-ny*w).toFixed(1)}" x2="\${(m[0]+nx*w).toFixed(1)}" y2="\${(m[1]+ny*w).toFixed(1)}"><stop offset="0" stop-color="#4B5364"/><stop offset=".25" stop-color="#8A94A7"/><stop offset=".5" stop-color="#C6CDD8"/><stop offset=".75" stop-color="#8A94A7"/><stop offset="1" stop-color="#4B5364"/></linearGradient></defs><path data-tr="\${[H[0],H[1],S[0],S[1],fl?1:0,male?1:0].join(",")}" d="\${d}" fill="url(#\${id})"/>\`; }
-function torsoHead(H,S,hc,fl,look){ const lk=look?\`<g transform="rotate(\${(fl?1:-1)*look} \${hc[0]} \${hc[1]})">\`:"<g>"; /* look: degrees the face turns up */ const u=unit(H,S), n=fl?[-u[1],u[0]]:[u[1],-u[0]], nose=\`<circle cx="\${hc[0]-n[0]*13}" cy="\${hc[1]-n[1]*13}" r="3.2" fill="url(#skin)" stroke="none" stroke-width="1"/>\`, a=D(Math.atan2(u[1],u[0]));
+/* ponytail: tied high at the back of the head, hangs and curves toward the back */
+/* hair: covers the crown and the back of the head; the ponytail is tied at the back and hangs with gravity */
+function ponytail(hc,u,n){ const t=[hc[0]+n[0]*12+u[0]*5,hc[1]+n[1]*12+u[1]*5], a=[t[0]+u[0]*4.5,t[1]+u[1]*4.5], b=[t[0]-u[0]*4.5,t[1]-u[1]*4.5], e=[t[0]+n[0]*12-u[0]*4,t[1]+n[1]*12-u[1]*4+30], c1=[t[0]+n[0]*20,t[1]+n[1]*20+4], c2=[t[0]+n[0]*6,t[1]+n[1]*6+14], pt=p=>p[0].toFixed(1)+","+p[1].toFixed(1);
+  return \`<path d="M\${pt(a)} Q\${pt(c1)} \${pt(e)} Q\${pt(c2)} \${pt(b)}Z" fill="\${HAIR}"/>\`; }
+function hairCap(hc,u,n,fl){ const r=13.9, A=[hc[0]+u[0]*r*.94-n[0]*r*.34,hc[1]+u[1]*r*.94-n[1]*r*.34], B=[hc[0]-u[0]*r*.55+n[0]*r*.84,hc[1]-u[1]*r*.55+n[1]*r*.84], C=[hc[0]+u[0]*3+n[0]*2,hc[1]+u[1]*3+n[1]*2], t=[hc[0]+n[0]*12+u[0]*5,hc[1]+n[1]*12+u[1]*5], pt=p=>p[0].toFixed(1)+","+p[1].toFixed(1);
+  return \`<path d="M\${pt(A)} A\${r} \${r} 0 0 \${fl?1:0} \${pt(B)} Q\${pt(C)} \${pt(A)}Z" fill="\${HAIR}"/><circle cx="\${t[0].toFixed(1)}" cy="\${t[1].toFixed(1)}" r="3.4" fill="#3A2A20"/>\`; }
+function torsoHead(H,S,hc,fl,look){ const lk=look?\`<g transform="rotate(\${(fl?1:-1)*look} \${hc[0]} \${hc[1]})">\`:"<g>"; /* look: degrees the face turns up */ const u=unit(H,S), n=fl?[-u[1],u[0]]:[u[1],-u[0]], nose=\`<circle cx="\${hc[0]-n[0]*13}" cy="\${hc[1]-n[1]*13}" r="3.2" fill="\${FEM?FP.skin[1]:"url(#skin)"}" stroke="none" stroke-width="1"/>\`, a=D(Math.atan2(u[1],u[0]));
   if(!FEM) return femTorso(H,S,fl,1)+lk+\`<circle cx="\${hc[0]}" cy="\${hc[1]}" r="15" fill="url(#headg)" stroke="#2B3140" stroke-width="1.4"/></g>\`;
   const B=[H[0]+(S[0]-H[0])*0.76-n[0]*9.5,H[1]+(S[1]-H[1])*0.76-n[1]*9.5], P=[hc[0]+n[0]*16,hc[1]+n[1]*16+9];
-  return femTorso(H,S,fl)+
-    lk+\`<circle cx="\${hc[0]+n[0]*2.5}" cy="\${hc[1]+n[1]*2.5}" r="15.5" fill="\${HAIR}"/><ellipse cx="\${P[0]}" cy="\${P[1]}" rx="6.5" ry="15" transform="rotate(\${n[0]*18} \${P[0]} \${P[1]})" fill="\${HAIR}"/>\`+
-    \`<circle cx="\${hc[0]}" cy="\${hc[1]}" r="13.5" fill="url(#headg)" stroke="#2B3140" stroke-width="1.4"/><path d="M\${hc[0]+u[0]*13.5+n[0]*3},\${hc[1]+u[1]*13.5+n[1]*3} A13.5 13.5 0 0 \${fl?1:0} \${hc[0]+n[0]*13.5},\${hc[1]+n[1]*13.5} Z" fill="\${HAIR}"/></g>\`; }
+  const nk=[S[0]+(hc[0]-S[0])*.62,S[1]+(hc[1]-S[1])*.62], nid="cy"+(CYG++), nn=[-(nk[1]-S[1]),nk[0]-S[0]], nl=Math.hypot(nn[0],nn[1])||1; /* neck: bare skin from the shoulders into the head */
+  return femTorso(H,S,fl)+\`<defs>\${lg(nid,S[0]-nn[0]/nl*6,S[1]-nn[1]/nl*6,S[0]+nn[0]/nl*6,S[1]+nn[1]/nl*6,FP.skin)}</defs><path d="\${cap(S,nk,5.2,4.6)}" fill="url(#\${nid})"/>\`+
+    lk+\`<circle cx="\${hc[0]+n[0]*2.5}" cy="\${hc[1]+n[1]*2.5}" r="15.5" fill="\${HAIR}"/>\`+ponytail(hc,u,n)+
+    \`<circle cx="\${hc[0]}" cy="\${hc[1]}" r="13.5" fill="url(#headf)" stroke="#5A3E33" stroke-width="1"/><circle cx="\${hc[0]-n[0]*8.5+u[0]*2}" cy="\${hc[1]-n[1]*8.5+u[1]*2}" r="1.5" fill="#2A211D"/>\${hairCap(hc,u,n,fl)}</g>\`; }
 const TW=()=>FEM?20:16;
 function frontHead(cx,cy,r){ const head=\`<circle cx="\${cx}" cy="\${cy}" r="\${r}" fill="url(#headg)" stroke="#2B3140" stroke-width="1.4"/>\`; if(!FEM) return head;
   return \`<circle cx="\${cx}" cy="\${cy-1}" r="\${r+3}" fill="\${HAIR}"/><ellipse cx="\${cx-r*0.9}" cy="\${cy+r*0.7}" rx="5" ry="\${r*0.95}" fill="\${HAIR}"/><ellipse cx="\${cx+r*0.9}" cy="\${cy+r*0.7}" rx="5" ry="\${r*0.95}" fill="\${HAIR}"/>\`+head+\`<path d="M\${cx-r},\${cy-1} Q\${cx},\${cy-r*1.7} \${cx+r},\${cy-1} Q\${cx+r*0.2},\${cy-r*0.75} \${cx-r},\${cy-1} Z" fill="\${HAIR}"/>\`; }
@@ -1163,6 +1179,18 @@ function anBelly(pos,t0,t1,s0,s1){ const N=10,A=[],B=[];
     A.push(pos(t,c+h)); B.push(pos(t,c-h)); }
   return A.concat(B.reverse()); }
 const anTM=g=>{ const a=Math.hypot(g.M[0]-g.H[0],g.M[1]-g.H[1]), b=Math.hypot(g.S[0]-g.M[0],g.S[1]-g.M[1]); return a/(a+b||1); };
+/* female side figure, illustrated style: recolour a limb's cylinder by what covers it — legs in leggings, arms bare, feet in sneakers */
+function femPaint(svg,el,role,ankle,far){ const f=el.getAttribute("fill")||"", i=f.indexOf("#cy"); if(i<0) return; const m=[0,f.slice(i+1,f.indexOf(")",i))]; const gr=svg.querySelector("#"+m[1]); if(!gr) return;
+  let C=role==="th"||role==="sh"||role==="tl"?FP.leg:role==="ua"||role==="fa"?FP.skin:ankle?FP.shoe:FP.skin; if(far) C=fpFar(C);
+  gr.querySelectorAll("stop").forEach((st,i)=>st.setAttribute("stop-color",C[Math.min(i,4)])); }
+/* female limb outline instead of a plain taper: full thigh, calf bulging at the back, slim ankle and wrist.
+   multipliers of the plain taper (wP at the distal end P, t=0 -> wQ at the proximal end Q, t=1); f = the side the face looks to, b = the back */
+const FSHAPE={th:{f:[1,.93,.95,1,1.02],b:[1,.95,1,1.06,1.1]},sh:{f:[.8,.85,.9,.93,.95],b:[.8,.9,1.12,1.22,1]},ua:{f:[1,.96,1,1.04,1],b:[1,1,1.06,1.08,1]},fa:{f:[.9,.95,1.02,1.06,1],b:[.9,.98,1.06,1.1,1]}};
+function femShape(el,role,P,Q,wP,wQ,fl){ const S=FSHAPE[role]; if(!S) return; const dx=Q[0]-P[0], dy=Q[1]-P[1], L=Math.hypot(dx,dy)||1, u=[dx/L,dy/L], f=fl?[u[1],-u[0]]:[-u[1],u[0]];
+  const w=(arr,t)=>{ const x=t*4, i=Math.min(3,Math.floor(x)), q=x-i, e=(1-Math.cos(q*Math.PI))/2; return (arr[i]+(arr[i+1]-arr[i])*e)*(wP+(wQ-wP)*t); }, N=14, F=[], B=[];
+  for(let i=0;i<=N;i++){ const t=i/N, c=[P[0]+dx*t,P[1]+dy*t], wf=w(S.f,t), wb=w(S.b,t); F.push([c[0]+f[0]*wf,c[1]+f[1]*wf]); B.push([c[0]-f[0]*wb,c[1]-f[1]*wb]); }
+  const r0=(w(S.f,0)+w(S.b,0))/2, r1=(w(S.f,1)+w(S.b,1))/2, pt=p=>p[0].toFixed(1)+","+p[1].toFixed(1), sw=fl?1:0;
+  el.setAttribute("d","M"+F.map(pt).join(" L")+" A"+r1.toFixed(1)+" "+r1.toFixed(1)+" 0 0 "+sw+" "+pt(B[N])+" L"+B.slice().reverse().map(pt).join(" L")+" A"+r0.toFixed(1)+" "+r0.toFixed(1)+" 0 0 "+sw+" "+pt(F[0])+"Z"); }
 function anatomy(svg,g,L,mx){ const covered=new Set(), tr=svg.querySelector("[data-tr]"), fl=tr?tr.getAttribute("data-tr").split(",")[4]==="1":null;
   const backView=!!svg.querySelector('[data-ft="pull"]'), J={};
   const add=(n,p)=>{ if(Array.isArray(p)&&p.length===2&&typeof p[0]==="number") (J[p[0].toFixed(1)+","+p[1].toFixed(1)]=J[p[0].toFixed(1)+","+p[1].toFixed(1)]||[]).push(n.replace(/^([A-Z][a-z]?)[lrbsft]$/,"$1").replace(/^Hd[lrsft]$/,"Hd")); };
@@ -1172,7 +1200,7 @@ function anatomy(svg,g,L,mx){ const covered=new Set(), tr=svg.querySelector("[da
   const idle=new Set((T[st.k]&&T[st.k].idle)||[]), raw={}; for(const n in g){ const v=g[n]; if(Array.isArray(v)&&v.length===2&&typeof v[0]==="number"){ const key=(+v[0]).toFixed(1)+","+(+v[1]).toFixed(1); raw[key]=(raw[key]!==false)&&idle.has(n); } } /* a point is idle only if every joint there is idle: the working elbow may pass through the resting one */
   const put=(el,html)=>{ const G=document.createElementNS(SVGNS,"g"); G.setAttribute("class","an"); G.innerHTML=html; el.after(G); };
   svg.querySelectorAll("[data-sg]").forEach(el=>{ const v=el.getAttribute("data-sg").split(","), a=[+v[0],+v[1]], b=[+v[2],+v[3]], wa=+v[4], wb=+v[5], far=v[6]==="1", hint=v[7]||"";
-    if(raw[a[0].toFixed(1)+","+a[1].toFixed(1)]||raw[b[0].toFixed(1)+","+b[1].toFixed(1)]) return;
+    const isIdle=raw[a[0].toFixed(1)+","+a[1].toFixed(1)]||raw[b[0].toFixed(1)+","+b[1].toFixed(1)];
     const na=nm(a[0],a[1]), nb=nm(b[0],b[1]), has=(arr,x)=>arr.indexOf(x)>=0; let role=null, P, Q, wP, wQ;
     const pick=(r,distA)=>{ role=r; if(distA){ P=a; Q=b; wP=wa; wQ=wb; } else { P=b; Q=a; wP=wb; wQ=wa; } };
     if(has(na,"H")&&has(nb,"M")){ role="tl"; P=a; Q=b; wP=wa; wQ=wb; }
@@ -1181,7 +1209,8 @@ function anatomy(svg,g,L,mx){ const covered=new Set(), tr=svg.querySelector("[da
     else if(has(na,"K")&&(has(nb,"A")||has(nb,"F"))) pick("sh",false); else if((has(na,"A")||has(na,"F"))&&has(nb,"K")) pick("sh",true);
     else if(has(na,"S")&&has(nb,"E")) pick("ua",false); else if(has(na,"E")&&has(nb,"S")) pick("ua",true);
     else if(has(na,"E")&&(has(nb,"Hd")||has(nb,"H")||has(nb,"W"))) pick("fa",false); else if((has(na,"Hd")||has(na,"W"))&&has(nb,"E")) pick("fa",true);
-    if(!role) return;
+    if(FEM&&fl!==null){ femPaint(svg,el,role,has(na,"A")||has(nb,"A")||has(na,"F")||has(nb,"F"),far); if(role&&role!=="tl") femShape(el,role,P,Q,wP,wQ,fl); }
+    if(!role||isIdle) return;
     const dx=Q[0]-P[0], dy=Q[1]-P[1], Ln=Math.hypot(dx,dy)||1, u=[dx/Ln,dy/Ln]; let f, spec;
     if(role==="tl"){ if(fl===null) return; f=fl?[u[1],-u[0]]:[-u[1],u[0]]; const tM=Math.round(anTM(g)*100)/100; spec=AN_TORSO.filter(m=>m.t[0]<tM-.025) /* a margin, not a bare comparison: a muscle ending right at tM must not flicker between the parts as the float rounds */.map(m=>({k:m.k,t:[m.t[0]/tM,Math.min(m.t[1],tM+.02)/tM],s:m.s})); }
     else if(fl!==null){ f=fl?[u[1],-u[0]]:[-u[1],u[0]]; spec=AN_LIMB[role]; }
@@ -1198,11 +1227,12 @@ function anatomy(svg,g,L,mx){ const covered=new Set(), tr=svg.querySelector("[da
     let h=""; list.forEach(m=>{ const c=anCol(m.k,L,mx); if(c.k) covered.add(c.k); m.k.forEach(k=>{ if(k in L) covered.add(k); }); h+=anShape(anPath(anBelly(pos,m.t[0],m.t[1],m.s[0],m.s[1])),c,false); });
     put(tr,h); }
   svg.querySelectorAll("[data-ft]").forEach(el=>{ let h=""; (AN_FT[el.getAttribute("data-ft")]||[]).forEach(([k,d])=>{ const c=anCol(k,L,mx); if(c.k) covered.add(c.k); k.forEach(x=>{ if(x in L) covered.add(x); }); h+=anShape(d,c,false); }); put(el,h); });
-  svg.querySelectorAll("g.mu[data-k]").forEach(m=>{ if(covered.has(m.getAttribute("data-k"))) m.remove(); }); }
+  svg.querySelectorAll("g.mu[data-k]").forEach(m=>{ if(covered.has(m.getAttribute("data-k"))) m.remove(); });
+  if(FEM&&fl!==null) svg.querySelectorAll('circle[fill="url(#skin)"]').forEach(c=>{ c.setAttribute("fill",FP.skin[1]); c.removeAttribute("stroke"); }); /* shoulder / hand caps of the female figure: bare skin */ }
 /* the muscle colours the body part itself: its glow is masked by the figure's own silhouette, nothing sticks out over the outline */
-const BODY_SEL='.bd,.bd2,[fill^="url(#cy"],[fill="url(#skin)"],[fill="url(#headg)"]', SVGNS="http://www.w3.org/2000/svg";
+const BODY_SEL='.bd,.bd2,[fill^="url(#cy"],[fill="url(#skin)"],[fill="url(#headg)"],[fill="url(#headf)"]', SVGNS="http://www.w3.org/2000/svg";
 function bodyLight(svg){ const mus=svg.querySelectorAll("g.mu,g.an"); if(!mus.length) return; const masks=new Map(); let n=0;
-  const body=[...svg.querySelectorAll(BODY_SEL)].filter(e=>!e.closest("g.mu,g.an,defs,mask,#hdl,#tor"));
+  const body=[...svg.querySelectorAll(BODY_SEL)].filter(e=>!e.closest("g.mu,g.an,defs,mask,#hdl,#tor,g[clip-path]"));
   mus.forEach(mu=>{ const par=mu.parentNode; let id=masks.get(par);
     if(!id){ const pm=par.getCTM&&par.getCTM(); if(!pm) return; const inv=pm.inverse(), mk=document.createElementNS(SVGNS,"mask"); id="bodym"+(n++);
       mk.setAttribute("id",id); mk.setAttribute("maskUnits","userSpaceOnUse"); mk.setAttribute("x","-2000"); mk.setAttribute("y","-2000"); mk.setAttribute("width","4000"); mk.setAttribute("height","4000");
@@ -1500,6 +1530,7 @@ const VYC={}; function viewY(tp){ const key=st.k+"|"+JSON.stringify(st.tl||{})+"
   const top=Math.min(tp.top||0,Math.floor(lo-36)), bot=Math.max(290,Math.ceil(hi+14)); return VYC[key]=[top,bot]; }
 function render(){ a3dSync(); const tp=T[st.k], g=tp.geo(st.t,st.p), gw=tp.geo(st.t,1), L=tp.load(gw), keys=Object.keys(L), sum=keys.reduce((a,k)=>a+L[k],0), mx=Math.max(...keys.map(k=>L[k]));
   let h=\`<defs><linearGradient id="skin" gradientUnits="userSpaceOnUse" x1="0" y1="-60" x2="0" y2="290"><stop offset="0" stop-color="#D2D8E1"/><stop offset=".55" stop-color="#ACB4C3"/><stop offset="1" stop-color="#7D8798"/></linearGradient>
+  <radialGradient id="headf" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#F3D2BA"/><stop offset=".45" stop-color="#E1B193"/><stop offset="1" stop-color="#A9765C"/></radialGradient>
   <radialGradient id="headg" cx=".34" cy=".28" r=".85"><stop offset="0" stop-color="#E2E7EE"/><stop offset=".22" stop-color="#D0D6DF"/><stop offset=".7" stop-color="#959FB0"/><stop offset="1" stop-color="#5B6373"/></radialGradient>
   <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="7"/></filter>
   <filter id="sh" x="-20%" y="-20%" width="140%" height="160%"><feGaussianBlur stdDeviation="4"/></filter>
