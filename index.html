@@ -403,7 +403,7 @@ const T={
   muscles:[["lats","H","S",0.5,10,30,11],["upback","H","S",0.86,10,18,10],["back","H","S",0.18,10,16,7],["rdelt","S","E",0.08,4,10,9],["bic","S","E",0.55,-7,16,6]],
   plate:"front", handle:"Hd"},
  pulldown:{name:__T("Тяга верхнього блока"),l0:__T("Вузький хват"),l1:__T("Широкий хват"),lv:t=>__T("хват ")+(Math.round(lerp(34,118,t)/50*10)/10).toString().replace(".",__DEC)+__T(" ширини плечей"),
-  geo(t,p){ const hw=lerp(34,118,t), by=lerp(152-Math.sqrt(AR*AR-(hw-50)**2),138,p) /* top: arms straight overhead */, Sl=[150,152], Sr=[250,152], Hl=[200-hw,by], Hr=[200+hw,by];
+  geo(t,p){ const hw=lerp(34,118,t), by=lerp(152-Math.sqrt(AR*AR-(hw-200+SX(150))**2),138,p) /* top: arms straight overhead */, Sl=[SX(150),152], Sr=[SX(250),152], Hl=[200-hw,by], Hr=[200+hw,by];
     const el=(S,Hh,sg)=>[lerp((S[0]+Hh[0])/2,Hh[0]+sg*4,p),lerp((S[1]+Hh[1])/2,Hh[1]+58,p)], El=el(Sl,Hl,-1), Er=el(Sr,Hr,1);
     return {Sl,Sr,Hl,Hr,El,Er,hw,by,hdl:Hr,l1:[154,176],l2:[182,236],r1:[246,176],r2:[218,236],u1:[166,158],u2:[194,166],u3:[234,158],u4:[206,166]};},
   load(g){ const d=g.hw-50; return {lats:0.35+0.65*cl((d+5)/45,0,1)-0.2*cl((d-55)/20,0,1),bic:0.15+0.85*cl((20-d)/45,0,1),upback:0.3+0.3*cl(d/60,0,1)}; },
@@ -489,10 +489,11 @@ function frontTorso(kind){ /* female: hourglass — rounded shoulders, waist abo
 const SH={H:[250,129],K:[252,189],A:[252,GROUND-6]};
 function sideStand(g,extra){ const H=SH.H,S=[250,58],K=SH.K,A=SH.A;
   return seg(A,[A[0]+24,GROUND],7,5)+seg(K,A,11,7)+seg(H,K,TW(),11)+torsoHead(H,S,[254,30]); }
-function frontStand(){ let h=\`<ellipse cx="200" cy="\${GROUND+2}" rx="60" ry="5" fill="#000" opacity=".45" filter="url(#sh)"/>\`;
+const SX=x=>FEM?200+(x-200)*.8:x; /* front view: female shoulders are narrower — arms start at the edge of her torso */
+function frontStand(noTorso){ let h=\`<ellipse cx="200" cy="\${GROUND+2}" rx="60" ry="5" fill="#000" opacity=".45" filter="url(#sh)"/>\`;
   h+=seg([185,134],[183,191],13.5,10,0,"th")+seg([183,191],[184,GROUND-6],10,6.5,0,"sh")+seg([215,134],[217,191],13.5,10,0,"th")+seg([217,191],[216,GROUND-6],10,6.5,0,"sh");
   h+=\`<rect x="192" y="58" width="16" height="18" rx="6" class="bd"/>\${frontHead(200,44,17)}\`;
-  h+=\`\${frontTorso("stand")}\`; return h; }
+  if(!noTorso) h+=frontTorso("stand"); return h; }
 const db=(p)=>\`<rect x="\${p[0]-12}" y="\${p[1]-5}" width="24" height="10" rx="4" fill="#4A5366" stroke="#2B3140"/>\`;
 Object.assign(T,{
  curl:{grp:"flex",mv:__T("Згинання ліктя"),name:__T("Згинання рук на біцепс"),l0:__T("Лікоть позаду"),l1:__T("Лікоть попереду"),
@@ -513,7 +514,7 @@ Object.assign(T,{
   draw(g,L,mx){ return sideStand(g)+this.muscles.map(m=>muscleAt(g,m,L[m[0]]/mx)).join("")+seg(g.S,g.E,9,7.5)+seg(g.E,g.Hd,7.5,6)+db(g.Hd)+\`\`; },
   handle:"hdl"},
  lat:{grp:"abd",mv:__T("Відведення плеча"),name:__T("Махи в сторони"),l0:__T("Низько"),l1:__T("Вище голови"),lv:t=>__T("підйом до ")+Math.round(lerp(50,130,t))+"°",
-  geo(t,p){ const am=lerp(50,130,t), a=R(lerp(10,am,p)), Sl=[150,84], Sr=[250,84], ar=[Math.sin(a),Math.cos(a)];
+  geo(t,p){ const am=lerp(50,130,t), a=R(lerp(10,am,p)), Sl=[SX(150),84], Sr=[SX(250),84], ar=[Math.sin(a),Math.cos(a)];
     const Er=[Sr[0]+48*ar[0],Sr[1]+48*ar[1]], Hr=[Sr[0]+90*ar[0],Sr[1]+90*ar[1]], El=[Sl[0]-48*ar[0],Sl[1]+48*ar[1]], Hl=[Sl[0]-90*ar[0],Sl[1]+90*ar[1]];
     return {Sl,Sr,El,Er,Hl,Hr,am,hdl:Hr,t1:[188,70],t2:[156,78],t3:[212,70],t4:[244,78]}; },
   load(g){ const a=g.am; return {mdelt:0.5+0.5*cl(a/90,0,1)-0.25*cl((a-95)/35,0,1),trap:0.1+0.9*cl((a-85)/35,0,1),supra:0.15+0.3*(1-cl(a/70,0,1))}; },
@@ -522,7 +523,7 @@ Object.assign(T,{
   draw(g,L,mx){ return frontStand()+this.muscles.map(m=>muscleAt(g,m,L[m[0]]/mx)).join("")+seg(g.Sl,g.El,11,9)+seg(g.El,g.Hl,9,7)+seg(g.Sr,g.Er,11,9)+seg(g.Er,g.Hr,9,7)+db(g.Hl)+db(g.Hr); },
   handle:"hdl"},
  fly:{grp:"abd",mv:__T("Приведення плеча"),name:__T("Зведення рук у кросовері"),l0:__T("Блоки вгорі"),l1:__T("Блоки внизу"),lv:t=>__T("блоки ")+(t<.33?__T("вгорі"):t<.66?__T("на рівні плечей"):__T("внизу")),
-  geo(t,p){ const py=lerp(30,236,t), Pl=[22,py], Pr=[378,py], Sl=[150,84], Sr=[250,84], M=lerp(204,96,t);
+  geo(t,p){ const py=lerp(30,236,t), Pl=[22,py], Pr=[378,py], Sl=[SX(150),84], Sr=[SX(250),84], M=lerp(204,96,t);
     const o=(S,P)=>{ const d=[P[0]-S[0],P[1]-S[1]],L=Math.hypot(...d); return [S[0]+92*d[0]/L,S[1]+92*d[1]/L]; };
     const Hr=[lerp(o(Sr,Pr)[0],208,p),lerp(o(Sr,Pr)[1],M,p)], Hl=[lerp(o(Sl,Pl)[0],192,p),lerp(o(Sl,Pl)[1],M,p)];
     const Er=[(Sr[0]+Hr[0])/2+12,(Sr[1]+Hr[1])/2+8], El=[(Sl[0]+Hl[0])/2-12,(Sl[1]+Hl[1])/2+8];
@@ -875,12 +876,12 @@ Object.assign(MC,{obl:[__T("Косі м’язи живота"),"#38C6F4"]});
 const legsSide=()=>{ const H=SH.H,K=SH.K,A=SH.A; return \`<ellipse cx="250" cy="\${GROUND+2}" rx="44" ry="5" fill="#000" opacity=".45" filter="url(#sh)"/>\`+seg(A,[A[0]+24,GROUND],7,5)+seg(K,A,11,7)+seg(H,K,TW(),11); };
 Object.assign(T,{
  shrug:{grp:"abd",mv:__T("Підйом лопаток (елевація)"),name:__T("Шраги з гантелями"),l0:__T("Руки вздовж тіла"),l1:__T("Плечі трохи назад"),lv:t=>t<.4?__T("руки вздовж тіла"):t>.6?__T("плечі назад"):__T("нейтрально"),
-  geo(t,p){ const up=lerp(0,16,p), Sl=[150,84-up], Sr=[250,84-up], Hl=[146,178-up], Hr=[254,178-up];
-    return {Sl,Sr,Hl,Hr,El:[147,132-up],Er:[253,132-up],t,up,hdl:Hr,t1:[186,74-up*0.5],t2:[156,82-up],t3:[214,74-up*0.5],t4:[244,82-up],m1:[188,96],m2:[212,96]}; },
+  geo(t,p){ const up=lerp(0,16,p), Sl=[SX(150),84-up], Sr=[SX(250),84-up], Hl=[SX(146),178-up], Hr=[SX(254),178-up];
+    return {Sl,Sr,Hl,Hr,El:[SX(147),132-up],Er:[SX(253),132-up],t,up,hdl:Hr,t1:[186,74-up*0.5],t2:[156,82-up],t3:[214,74-up*0.5],t4:[244,82-up],m1:[188,96],m2:[212,96]}; },
   load(g){ const t=g.t; return {trap:0.75,upback:0.12+0.3*t,mdelt:0.1}; },
   tip(g){ const t=g.t; return t>.6?["good",__T("Плечі трохи назад — підключається середня частина трапеції ✓")]:["good",__T("Піднімайте плечі прямо вгору до вух — без кругових рухів ✓ Руки не згинайте.")]; },
   muscles:[["trap","t1","t2",0.5,0,19,8],["trap","t3","t4",0.5,0,19,8],["upback","m1","m2",0.5,0,14,6]],
-  draw(g,L,mx){ let h=frontStand().replace(/<path d="M1[34]\\d,86[^>]*>|<path d="M15\\d,86[^>]*>/,"")+\`<g transform="translate(0,\${-g.up*0.9})">\${frontTorso("stand")}</g>\`;
+  draw(g,L,mx){ let h=frontStand(1)+\`<g transform="translate(0,149) scale(1,\${(69+g.up*0.9)/69}) translate(0,-149)">\${frontTorso("stand")}</g>\`; /* only the shoulders rise: the torso stretches up from the hips, which stay on the legs */
     h+=mus(this,g,L,mx)+seg(g.Sl,g.El,11,9)+seg(g.El,g.Hl,9,7)+seg(g.Sr,g.Er,11,9)+seg(g.Er,g.Hr,9,7)+db(g.Hl)+db(g.Hr); return h; },
   handle:"hdl"},
  frontraise:{grp:"abd",mv:__T("Згинання плеча"),name:__T("Підйом гантелей перед собою"),l0:__T("До рівня плечей"),l1:__T("Вище голови"),lv:t=>__T("підйом до ")+Math.round(lerp(80,160,t))+"°",
