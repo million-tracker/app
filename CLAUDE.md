@@ -4,7 +4,7 @@
 
 ## Version stamp (always update)
 The app shows a version label in Settings: `Million · версия DD.MM · HH:MM`.
-It is a hardcoded constant in `index.html`, currently `const Hi="27.11 · 18:24"`
+It is a hardcoded constant in `index.html`, currently `const Hi="27.11 · 19:05"`
 (the variable name may change after a rebuild — search for `a("версия")` to find it).
 
 **On every change pushed to the repository, update this stamp** to the current date
@@ -48,7 +48,9 @@ Keep hints short, name the source, never promise treatment; always "check with y
 indices of `pe` — keep them complete when products are added to `pe` (Ol() drives the generator, meal swap and «my foods»).
 gastr = ACG 2022 reflux triggers + alcohol; ibs = low-FODMAP elimination (Monash); panc = very fatty foods + alcohol;
 const = no exclusions, `FVd` adds 2 kiwi a day (Gearry 2023) and trims a carb to keep calories.
-Any chip except const sets 5 meals (`cgi`). Hints with sources in `qh()`; details in the project doc «Здоровье-доказательная-база».
+Any chip except const sets 5 meals (`cgi`).
+Products `pe` (352) are only appended at the end (indices are stable); dishes `Qo` (148) — name ≤30 chars, recipe ≤160 per language,
+items `[pe index, grams or "pieces", role p/c/f/v]`. Portion caps for all generators: `CAPF(n)` (cooked grains 300 g, yogurt/kefir 300 g, fruit 250 g). Hints with sources in `qh()`; details in the project doc «Здоровье-доказательная-база».
 
 ## Simulator figures (biomechanics screen)
 Body segments follow anthropometric ratios (Winter / Drillis–Contini). Large side-view figure: torso hip–shoulder 100,
