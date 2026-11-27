@@ -4,7 +4,7 @@
 
 ## Version stamp (always update)
 The app shows a version label in Settings: `Million · версия DD.MM · HH:MM`.
-It is a hardcoded constant in `index.html`, currently `const Hi="27.11 · 16:40"`
+It is a hardcoded constant in `index.html`, currently `const Hi="27.11 · 17:58"`
 (the variable name may change after a rebuild — search for `a("версия")` to find it).
 
 **On every change pushed to the repository, update this stamp** to the current date
@@ -33,6 +33,15 @@ The app supports Russian, Ukrainian and English. The biomechanics screen (templa
 string containing `<title>Біомеханіка вправи</title>`, plus its nested 3D pages) is
 written in Ukrainian and translated at runtime through the `__T()` dictionary
 (`__LD.ru` / `__LD.en`). New Ukrainian strings there need ru/en entries added.
+
+## Health limits in the program generator (evidence, owner 27.11)
+Chips `Xu` (back, knee, shoulder, heart, vein, diab) change the plan in `Ec` and the hints in `sh`.
+Swaps: `Ju` (generator) and `JuK0` (old knee map, used only when a user reports knee pain on an exercise).
+Extra exercises after the compounds (`HX` in `Ec`): back → plank every day; knee → leg extension + hip abduction
+on leg days; shoulder → face pull + cable row on upper days; vein → calf raises; heart → wall sit `wsit`
+(4 sets, 60→120 s, not with knee). Diabetes → after-cardio ≥20 min and up to 2 cardio days a week.
+Sources and the rules behind them: PROJECT.md in `million-tracker/api` («Здоровье: доказательная база»).
+Keep hints short, name the source, never promise treatment; always "check with your doctor" for heart/diabetes.
 
 ## Simulator figures (biomechanics screen)
 Body segments follow anthropometric ratios (Winter / Drillis–Contini). Large side-view figure: torso hip–shoulder 100,
