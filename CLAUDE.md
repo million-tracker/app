@@ -4,7 +4,7 @@
 
 ## Version stamp (always update)
 The app shows a version label in Settings: `Million · версия DD.MM · HH:MM`.
-It is a hardcoded constant in `index.html`, currently `const Hi="27.11 · 19:14"`
+It is a hardcoded constant in `index.html`, currently `const Hi="27.11 · 19:27"`
 (the variable name may change after a rebuild — search for `a("версия")` to find it).
 
 **On every change pushed to the repository, update this stamp** to the current date
@@ -42,6 +42,15 @@ on leg days; shoulder → face pull + cable row on upper days; vein → calf rai
 (4 sets, 60→120 s, not with knee). Diabetes → after-cardio ≥20 min and up to 2 cardio days a week.
 Sources and the rules behind them: PROJECT.md in `million-tracker/api` («Здоровье: доказательная база»).
 Keep hints short, name the source, never promise treatment; always "check with your doctor" for heart/diabetes.
+
+## Food exclusions and digestive problems in the menu builder (evidence, owner 27.11)
+`ed` (don't eat: dairy, gluten, eggs, fish, red, pork, nuts, sweet, legume) and `nd` (gastr, ibs, panc, const) list
+indices of `pe` — keep them complete when products are added to `pe` (Ol() drives the generator, meal swap and «my foods»).
+gastr = ACG 2022 reflux triggers + alcohol; ibs = low-FODMAP elimination (Monash); panc = very fatty foods + alcohol;
+const = no exclusions, `FVd` adds 2 kiwi a day (Gearry 2023) and trims a carb to keep calories.
+Any chip except const sets 5 meals (`cgi`).
+Products `pe` (352) are only appended at the end (indices are stable); dishes `Qo` (148) — name ≤30 chars, recipe ≤160 per language,
+items `[pe index, grams or "pieces", role p/c/f/v]`. Portion caps for all generators: `CAPF(n)` (cooked grains 300 g, yogurt/kefir 300 g, fruit 250 g). Hints with sources in `qh()`; details in the project doc «Здоровье-доказательная-база».
 
 ## Simulator figures (biomechanics screen)
 Body segments follow anthropometric ratios (Winter / Drillis–Contini). Large side-view figure: torso hip–shoulder 100,
